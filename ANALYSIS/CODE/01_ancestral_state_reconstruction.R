@@ -6,12 +6,8 @@
 # Description: Running a simple ancestral state reconstruction for the mimicry ability.  
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-# DATA ----
-# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
 # Loading libraries
-libraries = c('data.table', 'tidyverse', 'readxl', 'ape', 'ggtree', 'phytools')
+libraries = c('data.table', 'tidyverse', 'readxl', 'ape', 'phytools')
 for(lib in libraries){
   if(! lib %in% installed.packages()) lapply(lib, install.packages)
   lapply(libraries, require, character.only = TRUE)
@@ -21,8 +17,6 @@ for(lib in libraries){
 rm(list = ls()) 
 
 # Paths
-path_overview = 'ANALYSIS/DATA/parrot_vocalmimic_socioecol.xlsx'
-path_tree = 'ANALYSIS/DATA/5.ParrotSupertree.tre'
 path_pdf_tree = 'ANALYSIS/RESULTS/tree mimicry or not.pdf'
 path_pdf_tree_names = 'ANALYSIS/RESULTS/tree mimicry or not - named.pdf'
 path_pdf_tree_names_pets = 'ANALYSIS/RESULTS/tree mimicry or not - named - pets only.pdf'
@@ -30,103 +24,18 @@ path_pdf_overview = 'ANALYSIS/RESULTS/overview.pdf'
 path_cleaned_data = 'ANALYSIS/RESULTS/cleaned_data.RData'
 path_cleaned_data_long = 'ANALYSIS/RESULTS/cleaned_data_long.RData'
 path_functions = 'ANALYSIS/CODE/functions'
-path_body = 'ANALYSIS/DATA/body weight/master_dat.RData'
-path_brain = 'ANALYSIS/DATA/brain size/master_dat.RData'
-path_longevity = 'ANALYSIS/DATA/longevity/master_dat.RData'
-path_afr = 'ANALYSIS/DATA/AFR/5th percentile results.csv'
-path_taxonomy = 'ANALYSIS/DATA/IUCN translation list 01 _ manual added.csv'
-path_extended = 'ANALYSIS/DATA/parrot_vocalmimic_detailed_alldata.xlsx'
 
 # Import functions
 .functions = sapply(list.files(path_functions, pattern = '*R', full.names = T), source)
 
 # Load data
-dat = as.data.frame(read_xlsx(path_overview, na = 'NA'))
-
-# Load tree
-tree = read.tree(path_tree)
-
-# Taxize data
-taxonomy = read.csv2(path_taxonomy)
-dat$orig_species = dat$scinam %>% strsplit('_') %>% sapply(paste, collapse = ' ')
-dat = taxize.data.frame(dat, 'orig_species', taxonomy, printer = T)
-
-# Merge on other data
-load(path_body)
-dat = merge(dat, master_dat, by = 'species', all.x = T, all.y = F)
-load(path_brain)
-dat = merge(dat, master_dat, by = 'species', all.x = T, all.y = F)
-load(path_longevity)
-dat = merge(dat, master_dat, by = 'species', all.x = T, all.y = F)
-afr = read.csv2(path_afr)
-dat = merge(dat, afr, by = 'species', all.x = T, all.y = F)
-dat$log_afr = log(dat$afr_5th_percentile)
-
-# Load data
-dat_long = as.data.frame(read_xlsx(path_extended, na = 'NA'))
-
-# Taxize data
-taxonomy$original_species = tolower(taxonomy$original_species)
-dat_long$orig_species = dat_long$species %>% strsplit('_') %>% sapply(paste, collapse = ' ')
-dat_long = taxize.data.frame(dat_long, 'orig_species', taxonomy, printer = T)
-
-# Merge on other data
-load(path_body)
-dat_long = merge(dat_long, master_dat, by = 'species', all.x = T, all.y = F)
-load(path_brain)
-dat_long = merge(dat_long, master_dat, by = 'species', all.x = T, all.y = F)
-load(path_longevity)
-dat_long = merge(dat_long, master_dat, by = 'species', all.x = T, all.y = F)
-afr = read.csv2(path_afr)
-dat_long = merge(dat_long, afr, by = 'species', all.x = T, all.y = F)
-dat_long = merge(dat_long, dat[,c('species', 'gregar')], by = 'species', all.x = T, all.y = F)
-
-# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-# ANALYSIS ----
-# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-# Missing in tree
-test = unique(dat$scinam[!dat$scinam %in% tree$tip.label])
-if(length(test) > 0) stop('Species missing in tree.')
-
-# Pruning tree
-drop_tips = tree$tip.label[!tree$tip.label %in% dat$scinam]
-message('Dropping: ', paste(drop_tips, collapse = ', '), ' from tree.')
-tree = drop.tip(tree, drop_tips)
-
-# Ordering data according to tree
-rownames(dat) = dat$scinam
-dat = dat[tree$tip.label,]
-
-# Fixing genus
-dat$genus = dat$scinam %>% strsplit('_') %>% sapply(`[`, 1)
+load(path_cleaned_data)
 
 # Run ASR
 ph = data.frame(value = dat$vocal)
 rownames(ph) = tree$tip.label
 svl = as.matrix(ph)[,1]
 obj = contMap(tree, svl, outline = FALSE, plot = F)
-
-# Save objects
-save(dat, tree, file = path_cleaned_data)
-
-# Fixing some format
-dat_long$`total number of imitations` = dat_long$`total number of imitations` %>% str_remove('>')
-dat_long$n_im = as.numeric(dat_long$`total number of imitations`)
-
-# Fixing genus
-dat_long$genus = dat_long$species %>% strsplit(' ') %>% sapply(`[`, 1)
-
-# Fixing typos
-dat_long$`quality of speech mimicry`[which(dat_long$`quality of speech mimicry` == 'High')] = 'high'
-dat_long$`quality of speech mimicry`[which(dat_long$`quality of speech mimicry` == 'mediate')] =  'moderate'
-
-# Save objects
-save(dat_long, file = path_cleaned_data_long)
-
-# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-# PLOTTING ----
-# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 # Open PDF
 pdf(path_pdf_tree, 15, 15)
@@ -213,10 +122,10 @@ print(g, newpage = FALSE)
 dev.off()
 
 # Make simple plot of the data
-pdf(path_pdf_overview)
-plot(dat[dat$video == 1, c('vocal', 'genus', 'log_mean_body_weight', 'log_mean_life_exp', 'log_afr',
-                           'nesting', 'res_brain')])
-dev.off()
+# pdf(path_pdf_overview)
+# plot(dat[dat$video == 1, c('vocal', 'genus', 'log_mean_body_weight', 'log_mean_life_exp', 'log_afr',
+#                            'nesting', 'res_brain')])
+# dev.off()
 
 # Plot all names ----
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
