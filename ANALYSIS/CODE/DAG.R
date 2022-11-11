@@ -15,7 +15,7 @@ dag = dagitty('dag{
               BodySize -> Longevity;
               BodySize -> AFR;
               Longevity -> Mimicry}') 
-# drawdag(dag)
+drawdag(dag)
 
 dag = dagitty('dag{
               Sociality -> MimicryPresent;
