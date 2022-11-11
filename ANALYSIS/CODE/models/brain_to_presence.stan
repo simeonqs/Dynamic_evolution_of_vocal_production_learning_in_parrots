@@ -83,6 +83,12 @@ model{
 generated quantities{
   vector[2] a_greg;
   real cont_greg;
+  vector[N_obs] rel_brain;
+  vector[N_obs] brain_merge;
+  vector[N_obs] pred_brain;
   a_greg = z_greg * sigma_greg;
   cont_greg = a_greg[2] - a_greg[1];
+  brain_merge = merge_missing(brain_missidx, to_vector(stand_brain), brain_impute);
+  for(n in 1:N_obs) pred_brain[n] = a_brain + b_body_brain * stand_body[n];
+  for(i in 1:N_obs) rel_brain[i] = brain_merge[i] - pred_brain[i];
 }
