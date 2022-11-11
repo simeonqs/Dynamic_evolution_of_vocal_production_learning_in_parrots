@@ -22,7 +22,7 @@ rm(list = ls())
 
 # Paths
 path_overview = 'ANALYSIS/DATA/parrot_vocalmimic_socioecol.xlsx'
-path_extended = 'ANALYSIS/DATA/parrot_vocalmimic_detailed_updated.xlsx'
+path_extended = 'ANALYSIS/DATA/parrot_vocalmimic_detailed_updated_withoutfilter.xlsx'
 path_tree = 'ANALYSIS/DATA/5.ParrotSupertree.tre'
 path_cleaned_data = 'ANALYSIS/RESULTS/cleaned_data.RData'
 path_cleaned_data_long = 'ANALYSIS/RESULTS/cleaned_data_long.RData'
@@ -107,6 +107,10 @@ dat_long$genus = dat_long$species %>% strsplit(' ') %>% sapply(`[`, 1)
 # # Fixing typos
 # dat_long$mimicquality[which(dat_long$mimicquality == 'High')] = 'high'
 # dat_long$mimicquality[which(dat_long$mimicquality == 'mediate')] =  'moderate'
+
+# Fix column words
+dat_long$distinctwords = as.numeric(dat_long$distinctwords)
+dat_long$distinctwords[is.na(dat_long$distinctwords)] = 0
 
 # Save objects
 save(dat, tree, file = path_cleaned_data)
