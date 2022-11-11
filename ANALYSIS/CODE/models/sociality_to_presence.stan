@@ -36,3 +36,9 @@ model{
   } 
   mimic ~ binomial(1, p);
 }
+generated quantities{
+  vector[2] a_greg;
+  real cont_greg;
+  a_greg = a_bar + z_greg * sigma_greg;
+  cont_greg = a_greg[2] - a_greg[1];
+}
