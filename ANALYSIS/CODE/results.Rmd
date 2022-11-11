@@ -1,0 +1,42 @@
+---
+output: 
+  pdf_document:
+    citation_package: natbib
+    keep_tex: true
+    fig_caption: true
+    latex_engine: pdflatex
+title: "Results parrot mimicry"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+geometry: margin=1in
+fontfamily: mathpazo
+fontsize: 11pt
+# spacing: double
+---
+
+```{r include=FALSE}
+# Paths
+path_cleaned_data = '../RESULTS/cleaned_data.RData'
+path_cleaned_data_long = '../RESULTS/cleaned_data_long.RData'
+
+# Load data
+load(path_cleaned_data)
+load(path_cleaned_data_long)
+```
+
+We scored the vocal mimicry ability of `r length(tree$tip.label)` species (for the full distribution see Figure 1). `r sum(dat$vocal)` of showed at least one mimic. [Do we want to say something about the ancestral state reconstrution depicted in Figure 1?]
+
+![Phylogenetic tree of all parrots species for which vocal mimicry was assessed. Colours represent the ancestral state reconstruction of vocal mimicry ranging from blue = no vocal mimicry detected to red = vocal mimicry detected.](/Users/ssmeele/ownCloud/Simeon/MPI%20AB/Side%20projects/Parrort%20mimicry/parrot_mimicry/ANALYSIS/RESULTS/tree%20mimicry%20or%20not.pdf)
+
+We ran four models to test the total effect of longevity, relative brain size, sociality and body size on the probability that a species can mimic. All variables had a positive total effect, although the effect of relative brain size was highly uncertain (see Figure 2). 
+
+![Variables influencing the probability of a species being able to mimic. Lefthand side: posterior densities of the effect of longevity (red), relative brain size (green), gregariousness (blue) and body size (orange). For gregariousness the contrast between a non-gregarious and a gregarious species is shown. For all other variables the slope is shown. Righthand side: scatterplots of the raw data (grey) and 20 posterior predictions (coloured lines) per variable. ](/Users/ssmeele/ownCloud/Simeon/MPI AB/Side projects/Parrort mimicry/parrot_mimicry/ANALYSIS/RESULTS/results presence mimicry.pdf)
+
+We recorded the number of unique mimics that an individual produced for `r nrow(dat_long)` individuals across `r length(unique(dat_long$species))` species. We ran four models to test the total effect of longevity, relative brain size, sociality and body size on the number of unique mimics that an individual produced in a video. Longevity had no effect, relative brain size had a highly uncertain effect, while sociality and body size had a small positive effect (see Figure 3). 
+
+![Variables influencing the number of mimics an individual produced in a video. Lefthand side: posterior densities of the effect of longevity (red), relative brain size (green), gregariousness (blue) and body size (orange). For gregariousness the contrast between a non-gregarious and a gregarious species is shown. For all other variables the slope is shown. Righthand side: scatterplots of the raw data (grey) and 20 posterior predictions (coloured lines) per variable. ](/Users/ssmeele/ownCloud/Simeon/MPI AB/Side projects/Parrort mimicry/parrot_mimicry/ANALYSIS/RESULTS/results number of unique mimics.pdf)
+
+We also tested the influence of the four variable on the unique number of words an individual produced in a video (see Figure 4). Longevity had a clear total effect. Relative brain size had no clear effect. Sociality and body size had a small and uncertain effect. 
+
+![Variables influencing the number of words an individual produced in a video. Lefthand side: posterior densities of the effect of longevity (red), relative brain size (green), gregariousness (blue) and body size (orange). For gregariousness the contrast between a non-gregarious and a gregarious species is shown. For all other variables the slope is shown. Righthand side: scatterplots of the raw data (grey) and 20 posterior predictions (coloured lines) per variable. ](/Users/ssmeele/ownCloud/Simeon/MPI AB/Side projects/Parrort mimicry/parrot_mimicry/ANALYSIS/RESULTS/results number of unique words.pdf)
+
+
