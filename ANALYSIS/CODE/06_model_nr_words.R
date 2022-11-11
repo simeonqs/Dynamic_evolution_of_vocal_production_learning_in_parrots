@@ -21,7 +21,7 @@ rm(list = ls())
 # Paths
 path_cleaned_data_long = 'ANALYSIS/RESULTS/cleaned_data_long.RData'
 path_cleaned_data = 'ANALYSIS/RESULTS/cleaned_data.RData'
-path_models_nr_unique = 'ANALYSIS/RESULTS/models_nr_unique.RData'
+path_models_nr_unique_words = 'ANALYSIS/RESULTS/models_nr_unique_words.RData'
 
 # Load data
 load(path_cleaned_data_long)
@@ -53,7 +53,7 @@ cc_dat_short = cc_dat_short[order(cc_dat_short$species_index),]
 clean_dat = list(N_obs = nrow(cc_dat),
                  N_species = max(cc_dat$species_index),
                  N_genera = max(cc_dat_short$genus_index),
-                 n_mimic = cc_dat$n_im,
+                 n_mimic = cc_dat$distinctwords,
                  species = cc_dat$species_index, 
 
                  stand_long = as.numeric(scale(cc_dat_short$log_mean_life_exp)),
@@ -113,7 +113,7 @@ cc_dat_short = cc_dat_short[order(cc_dat_short$species_index),]
 clean_dat = list(N_obs = nrow(cc_dat),
                  N_species = max(cc_dat$species_index),
                  N_genera = max(cc_dat_short$genus_index),
-                 n_mimic = cc_dat$n_im,
+                 n_mimic = cc_dat$distinctwords,
                  species = cc_dat$species_index, 
                  
                  stand_body = as.numeric(scale(cc_dat_short$log_mean_body_weight)),
@@ -167,7 +167,7 @@ cc_dat_short = cc_dat_short[order(cc_dat_short$species_index),]
 clean_dat = list(N_obs = nrow(cc_dat),
                  N_species = max(cc_dat$species_index),
                  N_genera = max(cc_dat_short$genus_index),
-                 n_mimic = cc_dat$n_im,
+                 n_mimic = cc_dat$distinctwords,
                  species = cc_dat$species_index, 
                  
                  gregar = cc_dat_short$gregar + 1L,
@@ -214,7 +214,7 @@ cc_dat_short = cc_dat_short[order(cc_dat_short$species_index),]
 clean_dat = list(N_obs = nrow(cc_dat),
                  N_species = max(cc_dat$species_index),
                  N_genera = max(cc_dat_short$genus_index),
-                 n_mimic = cc_dat$n_im,
+                 n_mimic = cc_dat$distinctwords,
                  species = cc_dat$species_index, 
                  
                  stand_body = as.numeric(scale(cc_dat_short$log_mean_body_weight)),
@@ -237,4 +237,4 @@ print(precis(fit_nice))
 post_body = extract.samples(fit_nice)
 
 # Save ----
-save(post_long, post_brain, post_soc, post_body, file = path_models_nr_unique)
+save(post_long, post_brain, post_soc, post_body, file = path_models_nr_unique_words)
