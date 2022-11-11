@@ -1,7 +1,7 @@
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 # Project: parrot vocal mimicry
 # Date started: 27-08-2022
-# Date last modified: 14-09-2022
+# Date last modified: 11-11-2022
 # Author: Simeon Q. Smeele
 # Description: Loading the data and plotting a phylogenetic tree. 
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -22,6 +22,7 @@ rm(list = ls())
 
 # Paths
 path_overview = 'ANALYSIS/DATA/parrot_vocalmimic_socioecol.xlsx'
+path_extended = 'ANALYSIS/DATA/parrot_vocalmimic_detailed_updated.xlsx'
 path_tree = 'ANALYSIS/DATA/5.ParrotSupertree.tre'
 path_cleaned_data = 'ANALYSIS/RESULTS/cleaned_data.RData'
 path_cleaned_data_long = 'ANALYSIS/RESULTS/cleaned_data_long.RData'
@@ -31,7 +32,6 @@ path_brain = 'ANALYSIS/DATA/brain size/master_dat.RData'
 path_longevity = 'ANALYSIS/DATA/longevity/master_dat.RData'
 path_afr = 'ANALYSIS/DATA/AFR/5th percentile results.csv'
 path_taxonomy = 'ANALYSIS/DATA/IUCN translation list 01 _ manual added.csv'
-path_extended = 'ANALYSIS/DATA/parrot_vocalmimic_detailed_alldata.xlsx'
 
 # Import functions
 .functions = sapply(list.files(path_functions, pattern = '*R', full.names = T), source)
@@ -98,15 +98,15 @@ dat = dat[tree$tip.label,]
 dat$genus = dat$scinam %>% strsplit('_') %>% sapply(`[`, 1)
 
 # Fixing some format
-dat_long$`total number of imitations` = dat_long$`total number of imitations` %>% str_remove('>')
-dat_long$n_im = as.numeric(dat_long$`total number of imitations`)
+dat_long$distinctmimic = dat_long$distinctmimic %>% str_remove('>')
+dat_long$n_im = as.numeric(dat_long$distinctmimic)
 
 # Fixing genus
 dat_long$genus = dat_long$species %>% strsplit(' ') %>% sapply(`[`, 1)
 
-# Fixing typos
-dat_long$`quality of speech mimicry`[which(dat_long$`quality of speech mimicry` == 'High')] = 'high'
-dat_long$`quality of speech mimicry`[which(dat_long$`quality of speech mimicry` == 'mediate')] =  'moderate'
+# # Fixing typos
+# dat_long$mimicquality[which(dat_long$mimicquality == 'High')] = 'high'
+# dat_long$mimicquality[which(dat_long$mimicquality == 'mediate')] =  'moderate'
 
 # Save objects
 save(dat, tree, file = path_cleaned_data)
