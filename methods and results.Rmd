@@ -1,11 +1,12 @@
 ---
-output: 
+title: "Methods and results parrot mimicry"
+output:
+  word_document: default
   pdf_document:
     citation_package: natbib
-    keep_tex: true
-    fig_caption: true
+    keep_tex: yes
+    fig_caption: yes
     latex_engine: pdflatex
-title: "Methods and results parrot mimicry"
 geometry: margin=1in
 fontfamily: mathpazo
 fontsize: 11pt
