@@ -5,38 +5,112 @@ output:
     keep_tex: true
     fig_caption: true
     latex_engine: pdflatex
-title: "Results parrot mimicry"
-date: "`r format(Sys.time(), '%B %d, %Y')`"
+title: "Methods and results parrot mimicry"
 geometry: margin=1in
 fontfamily: mathpazo
 fontsize: 11pt
-# spacing: double
+bibliography: bibliography.bib
 ---
 
 ```{r include=FALSE}
 # Paths
-path_cleaned_data = '../RESULTS/cleaned_data.RData'
-path_cleaned_data_long = '../RESULTS/cleaned_data_long.RData'
+path_cleaned_data = 'ANALYSIS/RESULTS/cleaned_data.RData'
+path_cleaned_data_long = 'ANALYSIS/RESULTS/cleaned_data_long.RData'
 
 # Load data
 load(path_cleaned_data)
 load(path_cleaned_data_long)
 ```
 
-We scored the vocal mimicry ability of `r length(tree$tip.label)` species (for the full distribution see Figure 1). `r sum(dat$vocal)` of showed at least one mimic. [Do we want to say something about the ancestral state reconstrution depicted in Figure 1?]
+# Methods
+
+## Statistical analysis
+
+First we tried to understand what explained the presence of vocal mimicry across the parrot order. We ran an ancestral state reconstruction with the function `contMap` from the package *phytools* [@phytools]. We also ran a Bayesian model to test the strength of the phylogenetic model. We modeled the probability of a species being able to mimic and included a variance-covariance matrix with the covariance as a function of the phylogenetic distance, using the L2-norm.
+
+$$\begin{aligned}
+M & \sim \text{binomial}(1,\ p) & M = \text{mimicry or not}\\
+\text{logit}(p) & \sim \text{MVnormal}(\boldsymbol{\mu},\ \mathbf{S}) & p = \text{probility of mimicry}\\
+& & \boldsymbol{\mu} \text{ = average log-odds mimicry}\\
+& & \mathbf{S} \text{ = variance co-variance matrix}\\
+\text{S}_{ij} & = \eta^2\ \text{exp}(-\rho^2 \text{P}^2_{ij})\ +\ \delta_{\text{P}ij}\ \sigma_\text{P}^2 & \text{formula for L2 norm}\\
+\eta^2 & \sim \text{exponential}(2) & \text{P = normalised phylogenetic distance}\\
+\rho^2 & \sim \text{exponential}(0.1) & \eta^2, \rho^2 = \text{parameters for L2 norm}
+\end{aligned}$$
+
+Next we modeled which covariates explained the presence of mimicry. To determine which covariates to include in each model we used causal graphs [@glymour2016causal; @wright1934method], more specifically Directed Acyclic Graphs (DAGs) [@laubach2021biologist]. Here one represents all assumed causal relationships between variables with arrows. Each arrow represents the direction of causality. From this back-door criterion informs which variables should be included as de-confounders [@glymour2016causal]. We were interested in the effect of longevity, relative brain size, sociality and body mass. 
+
+### Longevity
+
+We hypothesised that longevity could effect the presence of mimicry, since longer lived species would benefit more from learning new vocalisations throughout their lives. We included relative brain size, sociality and body mass as covariates. To control for potential shared evolutionary history we also included a varying effect for genus. Since our model contained missing values and we were interested in the effect of relative rather than absolute brain size we ran a structural equation model similar as suggested by @smeele2022using. The main model was as follows:
+
+$$\begin{aligned}
+\underline{\text{model:}}\\
+M & \sim \text{binomial}(1,\ p) & M = \text{mimicry or not}\\
+\text{logit}(p) & = \bar{\alpha}\ + \alpha_G\ + \alpha_S\ + & p = \text{probility of mimicry}\\
+& \ \ \ \ \beta_L * L\ + \beta_{RB} * RB\ + \beta_B * B \\
+\\
+\underline{\text{priors:}}\\
+\bar{\alpha} & \sim \text{normal}(0,\ 1) & \text{average log-odds mimicry}\\
+\alpha_G & \sim \text{normal}(0,\ \sigma_G) & \text{off-set for genus}\\
+\sigma_G & \sim \text{exponential}(2) & \text{between genera standard deviation}\\
+\alpha_S & \sim \text{normal}(0,\ \sigma_S) & \text{off-set for sociality}\\
+\sigma_S & \sim \text{exponential}(2) & \text{between sociality standard deviation}\\
+\beta_L & \sim \text{normal}(0,\ 1) & \text{slope for longevity}\\
+\beta_{RB} & \sim \text{normal}(0,\ 1) & \text{slope for relative brain size}\\
+\beta_B & \sim \text{normal}(0,\ 1) & \text{slope for body size}
+\end{aligned}$$
+
+Missing values for longevity were imputed with the following sub-model:
+
+$$\begin{aligned}
+\underline{\text{model:}}\\
+L & \sim \text{normal}(\mu_L,\ \kappa_L) & L = \text{standardised life expectancy}\\
+\mu_L & = \bar{\theta}\ + \theta_G\ + \xi_{RB} * RB\ + \xi_B * B & \mu_L = \text{average life expectancy}\\
+\\
+\underline{\text{priors:}}\\
+\kappa_L & \sim \text{exponential}(2) & \text{standard deviation life expectancy}\\
+\bar{\theta} & \sim \text{normal}(0,\ 1) & \text{average life expectancy}\\
+\theta_G & \sim \text{normal}(0,\ \kappa_G) & \text{off-set for genus}\\
+\kappa_G & \sim \text{exponential}(2) & \text{between genera standard deviation}\\
+\xi_{RB} & \sim \text{normal}(0,\ 0.5) & \text{slope for relative brain size}\\
+\xi_B & \sim \text{normal}(0,\ 0.5) & \text{slope for body size}
+\end{aligned}$$
+
+Relative brain size ($RB$) was computed and missing values were imputed with the following sub-model:
+
+$$\begin{aligned}
+\underline{\text{model:}}\\
+Br & \sim \text{normal}(\mu_B,\ \phi_B) & Br = \text{standardised brain size}\\
+\mu_B & = \bar{\omega}\ + \omega_G\ + \gamma_B * B & \mu_B = \text{average brain size}\\
+PB & = \bar{\omega}\ + \gamma_B * B & PB = \text{predicted brain size}\\
+RB & = B - PB & RB = \text{relative brain size}\\
+\\
+\underline{\text{priors:}}\\
+\phi_B & \sim \text{exponential}(2) & \text{standard deviation brain size}\\
+\bar{\omega} & \sim \text{normal}(0,\ 1) & \text{average brain size}\\
+\omega_G & \sim \text{normal}(0,\ \phi_G) & \text{off-set for genus}\\
+\phi_G & \sim \text{exponential}(2) & \text{between genera standard deviation}\\
+\gamma_B & \sim \text{normal}(0,\ 0.5) & \text{slope for body size}
+\end{aligned}$$
+
+# Results
+
+We scored the vocal mimicry ability of `r length(tree$tip.label)` species (for the full distribution see Figure 1). `r sum(dat$vocal)` of showed at least one mimic. [Do we want to say something about the ancestral state reconstruction depicted in Figure 1?]
 
 ![Phylogenetic tree of all parrots species for which vocal mimicry was assessed. Colours represent the ancestral state reconstruction of vocal mimicry ranging from blue = no vocal mimicry detected to red = vocal mimicry detected.](/Users/ssmeele/ownCloud/Simeon/MPI%20AB/Side%20projects/Parrort%20mimicry/parrot_mimicry/ANALYSIS/RESULTS/tree%20mimicry%20or%20not.pdf)
 
 We ran four models to test the total effect of longevity, relative brain size, sociality and body size on the probability that a species can mimic. All variables had a positive total effect, although the effect of relative brain size was highly uncertain (see Figure 2). 
 
-![Variables influencing the probability of a species being able to mimic. Lefthand side: posterior densities of the effect of longevity (red), relative brain size (green), gregariousness (blue) and body size (orange). For gregariousness the contrast between a non-gregarious and a gregarious species is shown. For all other variables the slope is shown. Righthand side: scatterplots of the raw data (grey) and 20 posterior predictions (coloured lines) per variable. ](/Users/ssmeele/ownCloud/Simeon/MPI AB/Side projects/Parrort mimicry/parrot_mimicry/ANALYSIS/RESULTS/results presence mimicry.pdf)
+![Variables influencing the probability of a species being able to mimic. Lefthand side: posterior densities of the effect of longevity (red), relative brain size (green), gregariousness (blue) and body size (orange). For gregariousness the contrast between a non-gregarious and a gregarious species is shown. For all other variables the slope is shown. Righthand side: scatterplots of the raw data (grey) and 20 posterior predictions (coloured lines) per variable. ](/Users/ssmeele/ownCloud/Simeon/MPI AB/Side projects/Parrort mimicry/parrot_mimicry/ANALYSIS/RESULTS/results presence mimicry - icons.pdf)
 
 We recorded the number of unique mimics that an individual produced for `r nrow(dat_long)` individuals across `r length(unique(dat_long$species))` species. We ran four models to test the total effect of longevity, relative brain size, sociality and body size on the number of unique mimics that an individual produced in a video. Longevity had no effect, relative brain size had a highly uncertain effect, while sociality and body size had a small positive effect (see Figure 3). 
 
-![Variables influencing the number of mimics an individual produced in a video. Lefthand side: posterior densities of the effect of longevity (red), relative brain size (green), gregariousness (blue) and body size (orange). For gregariousness the contrast between a non-gregarious and a gregarious species is shown. For all other variables the slope is shown. Righthand side: scatterplots of the raw data (grey) and 20 posterior predictions (coloured lines) per variable. ](/Users/ssmeele/ownCloud/Simeon/MPI AB/Side projects/Parrort mimicry/parrot_mimicry/ANALYSIS/RESULTS/results number of unique mimics.pdf)
+![Variables influencing the number of mimics an individual produced in a video. Lefthand side: posterior densities of the effect of longevity (red), relative brain size (green), gregariousness (blue) and body size (orange). For gregariousness the contrast between a non-gregarious and a gregarious species is shown. For all other variables the slope is shown. Righthand side: scatterplots of the raw data (grey) and 20 posterior predictions (coloured lines) per variable. ](/Users/ssmeele/ownCloud/Simeon/MPI AB/Side projects/Parrort mimicry/parrot_mimicry/ANALYSIS/RESULTS/results number of unique mimics - icons.pdf)
 
 We also tested the influence of the four variable on the unique number of words an individual produced in a video (see Figure 4). Longevity had a clear total effect. Relative brain size had no clear effect. Sociality and body size had a small and uncertain effect. 
 
-![Variables influencing the number of words an individual produced in a video. Lefthand side: posterior densities of the effect of longevity (red), relative brain size (green), gregariousness (blue) and body size (orange). For gregariousness the contrast between a non-gregarious and a gregarious species is shown. For all other variables the slope is shown. Righthand side: scatterplots of the raw data (grey) and 20 posterior predictions (coloured lines) per variable. ](/Users/ssmeele/ownCloud/Simeon/MPI AB/Side projects/Parrort mimicry/parrot_mimicry/ANALYSIS/RESULTS/results number of unique words.pdf)
+![Variables influencing the number of words an individual produced in a video. Lefthand side: posterior densities of the effect of longevity (red), relative brain size (green), gregariousness (blue) and body size (orange). For gregariousness the contrast between a non-gregarious and a gregarious species is shown. For all other variables the slope is shown. Righthand side: scatterplots of the raw data (grey) and 20 posterior predictions (coloured lines) per variable. ](/Users/ssmeele/ownCloud/Simeon/MPI AB/Side projects/Parrort mimicry/parrot_mimicry/ANALYSIS/RESULTS/results number of unique words - icons.pdf)
 
-
+\pagebreak
+# References
