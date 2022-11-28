@@ -26,13 +26,13 @@ load(path_cleaned_data_long)
 
 ## Statistical analysis
 
-First we tried to understand what explained the presence of vocal mimicry across the parrot order. We ran an ancestral state reconstruction with the function `contMap` from the package *phytools* [@phytools]. We also ran a Bayesian model to test the strength of the phylogenetic model. We modeled the probability of a species being able to mimic and included a variance-covariance matrix with the covariance as a function of the phylogenetic distance, using the L2-norm.
+First we tried to understand what explained the presence of vocal mimicry across the parrot order. We ran ancestral state reconstruction with the function `contMap` from the package *phytools* [@phytools]. We also ran a Bayesian model to test the strength of the phylogenetic model. We modelled the probability of a species being able to mimic and included a variance-covariance matrix with the covariance as a function of the phylogenetic distance, using the L2-norm. We used Stan to define the models [@gelman2015stan] and the package *cmdstanr* to fit [@cmstanr] with four chains, 1000 burn-in and 1000 sample iterations, and `adapt_delta = 0.95`. We used R-hat to monitor model convergence and report any deviation outside 0.99-1.01 in the results section. 
 
 $$\begin{aligned}
 M & \sim \text{binomial}(1,\ p) & M = \text{mimicry or not}\\
-\text{logit}(p) & \sim \text{MVnormal}(\boldsymbol{\mu},\ \mathbf{S}) & p = \text{probility of mimicry}\\
-& & \boldsymbol{\mu} \text{ = average log-odds mimicry}\\
-& & \mathbf{S} \text{ = variance co-variance matrix}\\
+\text{logit}(p) & \sim \text{MVnormal}(\mu,\ S) & p = \text{probility of mimicry}\\
+& & \mu \text{ = average log-odds mimicry}\\
+& & S \text{ = variance co-variance matrix}\\
 \text{S}_{ij} & = \eta^2\ \text{exp}(-\rho^2 \text{P}^2_{ij})\ +\ \delta_{\text{P}ij}\ \sigma_\text{P}^2 & \text{formula for L2 norm}\\
 \eta^2 & \sim \text{exponential}(2) & \text{P = normalised phylogenetic distance}\\
 \rho^2 & \sim \text{exponential}(0.1) & \eta^2, \rho^2 = \text{parameters for L2 norm}
@@ -93,6 +93,57 @@ RB & = B - PB & RB = \text{relative brain size}\\
 \phi_G & \sim \text{exponential}(2) & \text{between genera standard deviation}\\
 \gamma_B & \sim \text{normal}(0,\ 0.5) & \text{slope for body size}
 \end{aligned}$$
+
+### Relative brain size
+
+We hypothesised that relative brain size could effect the presence of mimicry, since larger brains would allow a species to socially learn new vocalisations. We included sociality as covariate. The model structure was similar to that of longevity.
+
+### Sociality
+
+We hypothesised that sociality could effect the presence of mimicry, since social species would benefit more and would have more opportunity to socially learn new vocalisations. We did not include any covariates. The model structure was similar to that of longevity.
+
+### Body size
+
+We hypothesised that body size could effect the presence of mimicry, since larger species have a larger syrinx, which would make mimics more recognisable to a human observer. Furthermore, we expected larger species to be more often housed as single individuals, increasing the likelihood that they mimic vocalisations of their caretakers. We did not include any covariates. The model structure was similar to that of longevity.
+
+The third goal of our study was to understand what drives the mimicry repertoire of a species. We were interested in the overall number of unique mimics and in the number of unique words produced by a species. For this we had multiple observations per species and therefore expanded the models to include a varying effect of species as well as of genus. 
+
+### Longevity
+
+We again hypothesised that longevity could effect the unique number of mimics, since longer lived species have more time to learn mimics. The main model was as follows:
+
+$$\begin{aligned}
+\underline{\text{model:}}\\
+NM & \sim \text{poison}(\exp(\lambda)) & NM = \text{number of mimics}\\
+\lambda & = \bar{\alpha}\ + \alpha_G\ + \alpha_{Sp} + \alpha_S\ + & \lambda = \text{average number mimics}\\
+& \ \ \ \ \beta_L * L\ + \beta_{RB} * RB\ + \beta_B * B \\
+\\
+\underline{\text{priors:}}\\
+\bar{\alpha} & \sim \text{normal}(2,\ 2) & \text{global average number mimics}\\
+\alpha_G & \sim \text{normal}(0,\ \sigma_G) & \text{off-set for genus}\\
+\sigma_G & \sim \text{exponential}(2) & \text{between genera standard deviation}\\
+\alpha_{So} & \sim \text{normal}(0,\ \sigma_{So}) & \text{off-set for species}\\
+\sigma_{So} & \sim \text{exponential}(2) & \text{between species standard deviation}\\
+\alpha_S & \sim \text{normal}(0,\ \sigma_S) & \text{off-set for sociality}\\
+\sigma_S & \sim \text{exponential}(2) & \text{between sociality standard deviation}\\
+\beta_L & \sim \text{normal}(0,\ 1) & \text{slope for longevity}\\
+\beta_{RB} & \sim \text{normal}(0,\ 1) & \text{slope for relative brain size}\\
+\beta_B & \sim \text{normal}(0,\ 1) & \text{slope for body size}
+\end{aligned}$$
+
+The sub-models to impute longevity and calculate and impute relative brain size were similar to the model of mimic presence. It should be noted that longevity and relative brain size were imputed at the species level, while the main model contained multiple observations for some species. 
+
+### Relative brain size
+
+We hypothesised that relative brain size could effect the number of unique mimics, since larger brains would allow a species to learn and remember more mimics. We included sociality as covariate. The model structure was similar to that of longevity.
+
+### Sociality
+
+We hypothesised that sociality could effect the number of unique mimics, since social species would benefit more and would have more opportunity to socially learn new vocalisations. We did not include any covariates. The model structure was similar to that of longevity.
+
+### Body size
+
+We hypothesised that body size could effect the number of unique mimics, since larger species have a larger syrinx, which would make mimics more recognisable to a human observer. Furthermore, we expected larger species to be more often housed as single individuals, increasing the likelihood that they mimic vocalisations of their caretakers. We did not include any covariates. The model structure was similar to that of longevity.
 
 # Results
 
