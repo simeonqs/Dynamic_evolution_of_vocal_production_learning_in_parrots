@@ -126,7 +126,7 @@ mtext('probability of mimicry', 2, 2.5, cex = 0.75)
 dev.off()
 
 # Phylogenetic model
-pdf(path_pdf_phylo)
+pdf(path_pdf_phylo, 5, 5)
 plot(NULL, xlab = '', ylab = '',
      xlim = c(0, 1) , ylim = c(0, 4), main = 'phylogenetic signal', cex = 2, cex.axis = 1.25, cex.main = 1.5)
 mtext('normalised phylogenetic distance', 1, 3, cex = 1)
@@ -135,7 +135,7 @@ x_seq <- seq(from = 0, to = 1, length.out = 1000)
 # for(i in 1:20) curve( rexp(1, 2)*exp(-rexp(1, 0.1)*x^2) , add = TRUE ,
 #                       col = alpha('grey', 0.4), lwd = 4)
 for(i in 1:20){
-  curve( post$etasq[i]*exp(-post$rhosq[i]*x^2) , add = TRUE ,
+  curve( post_phylo$etasq[i]*exp(-post_phylo$rhosq[i]*x^2) , add = TRUE ,
          col = alpha('black', 0.4), lwd = 4)
 }
 dev.off()
