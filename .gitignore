@@ -5,3 +5,4 @@
 *.DS_Store
 ANALYSIS/DATA
 .Rproj.user
+*.tex
