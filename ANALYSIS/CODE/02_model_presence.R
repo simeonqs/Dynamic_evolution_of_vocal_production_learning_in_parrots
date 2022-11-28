@@ -1,15 +1,16 @@
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 # Project: parrot vocal mimicry
 # Date started: 10-11-2022
-# Date last modified: 11-11-2022
+# Date last modified: 28-11-2022
 # Author: Simeon Q. Smeele
 # Description: Modelling the presence of mimicry. 
+# source('ANALYSIS/CODE/02_model_presence.R')
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 # Set-up ----
 
 # Loading libraries
-libraries = c('tidyverse', 'rethinking', 'cmdstanr')
+libraries = c('tidyverse', 'rethinking', 'cmdstanr', 'ape')
 for(lib in libraries){
   if(! lib %in% installed.packages()) lapply(lib, install.packages)
   lapply(libraries, require, character.only = TRUE)
@@ -176,6 +177,23 @@ precis(fit_nice)
 
 post_body = extract.samples(fit_nice)
 
+# Phylogenetic model ----
+clean_dat = list(mimic = dat$vocal,
+                 dmat = cophenetic(tree)/max(cophenetic(tree)),
+                 N_species = nrow(dat))
+model = cmdstan_model('ANALYSIS/CODE/models/phylo_signal.stan')
+fit = model$sample(data = clean_dat, 
+                   seed = 1, 
+                   chains = 4, 
+                   parallel_chains = 4,
+                   refresh = 100,
+                   adapt_delta = 0.95) 
+
+fit_nice = fit$output_files() %>%
+  rstan::read_stan_csv()
+precis(fit_nice)
+post_phylo = extract.samples(fit_nice)
+
 # Save ----
-save(post_long, post_brain, post_soc, post_body, file = path_models_presence)
+save(post_long, post_brain, post_soc, post_body, post_phylo, file = path_models_presence)
 
