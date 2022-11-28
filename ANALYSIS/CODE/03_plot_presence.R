@@ -1,7 +1,7 @@
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 # Project: parrot vocal mimicry
 # Date started: 11-11-2022
-# Date last modified: 11-11-2022
+# Date last modified: 26-11-2022
 # Author: Simeon Q. Smeele
 # Description: Plotting the outcomes of the presence models.   
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -26,6 +26,7 @@ path_cleaned_data_long = 'ANALYSIS/RESULTS/cleaned_data_long.RData'
 path_cleaned_data = 'ANALYSIS/RESULTS/cleaned_data.RData'
 path_pdf = 'ANALYSIS/RESULTS/results presence mimicry.pdf'
 path_models_nr_unique = 'ANALYSIS/RESULTS/models_nr_unique.RData'
+path_pdf_phylo = 'ANALYSIS/RESULTS/results phylogenetic signal.pdf'
 
 # Load data
 load(path_cleaned_data_long)
@@ -123,3 +124,20 @@ mtext('probability of mimicry', 2, 2.5, cex = 0.75)
 
 # Close PDF
 dev.off()
+
+# Phylogenetic model
+pdf(path_pdf_phylo)
+plot(NULL, xlab = '', ylab = '',
+     xlim = c(0, 1) , ylim = c(0, 4), main = 'phylogenetic signal', cex = 2, cex.axis = 1.25, cex.main = 1.5)
+mtext('normalised phylogenetic distance', 1, 3, cex = 1)
+mtext('covariance', 2, 3, cex = 1)
+x_seq <- seq(from = 0, to = 1, length.out = 1000)
+# for(i in 1:20) curve( rexp(1, 2)*exp(-rexp(1, 0.1)*x^2) , add = TRUE ,
+#                       col = alpha('grey', 0.4), lwd = 4)
+for(i in 1:20){
+  curve( post$etasq[i]*exp(-post$rhosq[i]*x^2) , add = TRUE ,
+         col = alpha('black', 0.4), lwd = 4)
+}
+dev.off()
+
+
