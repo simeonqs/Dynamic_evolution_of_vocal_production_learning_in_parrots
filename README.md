@@ -89,13 +89,48 @@ All data is in `ANALYSIS/DATA`:
 	
 - `5.ParrotSupertree.tre` phylogenetic tree
 
-- `parrot_vocalmimic_detailed_updated_withoutfilter.xlsx` raw data with information per vide
+- `parrot_vocalmimic_detailed_updated_withoutfilter.xlsx` raw data with information per video
 
-	- **insert meta data**
+	- `species` the latin name of the species 
+	- `genus` the name of the genus 
+	- `video` the running number of the video analysed 
+	- `vocalmimic` the presence of vocal imitation 
+	- `totalnrmimic` the total number of mimics of the subject in the video produced (including repetitions)
+	- `birdvisible(s)` the time in seconds the focal subject is visible in the video 
+	- `mimicquality` the quality of the imitation produced 
+	- `template` the presence of a template for the produced imitation 
+	- `soundtype` the type of sound imitated (words, sounds, songs)  
+	- `distinctmimic` the number of unique imitations, i.e. how many different words, sounds and melodies were recognisable in the video  
+	- `distinctwords` the number of unique word imitations, i.e. how many different words were recognisable in the video 
+	- `distinctsounds` the number of unique anthropogenic sound imitations, i.e. how many different sounds were recognisable in the video  
+	- `distinctsinging` the number of unique melodies imitations, i.e. how many different melodies were recognisable in the video 
+	- `distallospec` the number of unique allospecific sounds imitations, i.e. how many different melodies were recognisable in the video 
+	- `distenviron` the number of unique environmental sounds imitations, i.e. how many different melodies were recognisable in the video 
+	- `babbling` the presence of undistinguishable babbling
+	- `nrmimcpersoundtype` the number of unique imitations per sound type 
+	- `language` the language of the imitated human words
+	- `context` the context in which the subject produced the imitations in the video (i.e., when sitting alone, in an interaction with a human, or in an interaction with a conspecific)
+	- `templatemimic` whether a template present in the video was imitated or not 
+	- `repeatmove` the presence of repeated body/head movements during the vocalisation
+	- `repeatmimic` the presence of repeated body/head movements during the imitation
+	- `sex` the sex of the subject (if available in the video description) 
+	- `video_link` the link to the accessed video 
+	- `date_accessed_for_analysis` the date that the video was accessed for the video analysis
+
 	
 - `parrot_vocalmimic_socioecol.xlsx` raw data with single data point per species
 
-	- **insert meta data**
+	- `scinam` the scintific name of the species according to the IUCN 
+	- `genus` the latin name if the genus  
+	- `family` the latin name if the family 
+	- `vocal` the presence of vocal imitation  
+	- `pet`	whether the species is reported as common in the pet trade according to CITES 
+	- `video` whether video search for a given species was successful or nor 
+	- `gregar` A species was classified as gregarious if the description suggested that the breeding pairs nest close together or if the species is described as colonial according to the HBW Alive (del Hoyo et al., 2017) 
+	- `habitat` habitat type was classified as ‘open’ for species that occur in habitats such as savannah, grassland, shrubland, forest edges, arid and eucalypt woodland or cliffs, as ‘closed’ for species that occur in habitats such as forest, riverine forest, riparian forest, pine woodland, mangrove, evergreen lowland or wooded country and as ‘mixed’ for species that inhabit both ‘open’ and ‘forested’ habitat. 
+	- `diet` diet type was classified as ‘granivore’ for species that feed mainly on seeds and nuts, as ‘fructivore’ for species that feed mainly on fruits and plants, as ‘nectarivore’ for species that feed mainly on nectar and flowers, and as ‘mixed’ for species that feed on all types 
+
+
 
 All results can be found in `ANALYSIS/RESULTS`:
 
