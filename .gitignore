@@ -3,7 +3,6 @@
 *.RData
 *.Ruserdata
 *.DS_Store
-ANALYSIS/DATA
 .Rproj.user
 *.tex
 ~$thods-and-results.docx
