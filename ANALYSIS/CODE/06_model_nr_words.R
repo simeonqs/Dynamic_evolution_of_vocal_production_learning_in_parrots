@@ -1,7 +1,7 @@
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 # Project: parrot vocal mimicry
 # Date started: 11-11-2022
-# Date last modified: 11-11-2022
+# Date last modified: 29-11-2022
 # Author: Simeon Q. Smeele
 # Description: Modelling the number of unique words.  
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -81,11 +81,11 @@ fit = model$sample(data = clean_dat,
                    refresh = 500,
                    adapt_delta = 0.99,
                    max_treedepth = 15) 
-fit_nice = fit$output_files() %>%
+fit_nice_long = fit$output_files() |>
   rstan::read_stan_csv()
-precis(fit_nice)
+precis(fit_nice_long)
 
-post_long = extract.samples(fit_nice)
+post_long = extract.samples(fit_nice_long)
 
 # Model total effect brain size ----
 
@@ -136,11 +136,11 @@ fit = model$sample(data = clean_dat,
                    refresh = 500,
                    adapt_delta = 0.99,
                    max_treedepth = 15) 
-fit_nice = fit$output_files() %>%
+fit_nice_brain = fit$output_files() |>
   rstan::read_stan_csv()
-print(precis(fit_nice))
+precis(fit_nice_brain)
 
-post_brain = extract.samples(fit_nice)
+post_brain = extract.samples(fit_nice_brain)
 
 # Model total effect sociality ----
 
@@ -183,11 +183,11 @@ fit = model$sample(data = clean_dat,
                    refresh = 500,
                    adapt_delta = 0.99,
                    max_treedepth = 15) 
-fit_nice = fit$output_files() %>%
+fit_nice_soc = fit$output_files() |>
   rstan::read_stan_csv()
-precis(fit_nice)
+precis(fit_nice_soc)
 
-post_soc = extract.samples(fit_nice)
+post_soc = extract.samples(fit_nice_soc)
 
 # Model total effect body size ----
 
@@ -230,11 +230,13 @@ fit = model$sample(data = clean_dat,
                    refresh = 500,
                    adapt_delta = 0.99,
                    max_treedepth = 15) 
-fit_nice = fit$output_files() %>%
+fit_nice_body = fit$output_files() |>
   rstan::read_stan_csv()
-print(precis(fit_nice))
+precis(fit_nice_body)
 
-post_body = extract.samples(fit_nice)
+post_body = extract.samples(fit_nice_body)
 
 # Save ----
-save(post_long, post_brain, post_soc, post_body, file = path_models_nr_unique_words)
+save(post_long, post_brain, post_soc, post_body,
+     fit_nice_long, fit_nice_brain, fit_nice_soc, fit_nice_body, 
+     file = path_models_nr_unique_words)
