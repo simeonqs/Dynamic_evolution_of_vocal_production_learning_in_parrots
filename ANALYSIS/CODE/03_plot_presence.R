@@ -25,7 +25,7 @@ cols = c(red = '#d11141', green = '#00b159', blue = '#00aedb', orange = '#f37735
 path_cleaned_data_long = 'ANALYSIS/RESULTS/cleaned_data_long.RData'
 path_cleaned_data = 'ANALYSIS/RESULTS/cleaned_data.RData'
 path_pdf = 'ANALYSIS/RESULTS/results presence mimicry.pdf'
-path_models_nr_unique = 'ANALYSIS/RESULTS/models_nr_unique.RData'
+path_models_presence = 'ANALYSIS/RESULTS/models_presence.RData'
 path_pdf_phylo = 'ANALYSIS/RESULTS/results phylogenetic signal.pdf'
 
 # Load data
