@@ -140,4 +140,19 @@ for(i in 1:20){
 }
 dev.off()
 
-
+# Habitat output
+pdf('ANALYSIS/RESULTS/habitat results.pdf', 5, 5)
+a_hab_means = post_hab$a_hab |> apply(2, mean) |> inv_logit()
+a_hab_pis = post_hab$a_hab |> apply(2, PI) |> inv_logit()
+plot(a_hab_means, 1:3, xlim = c(0, 1), xlab = 'probability mimicry', yaxt = 'n', ylab = '')
+axis(2, 1:3, c('closed', 'mixed', 'open'))
+for(i in 1:3) lines(a_hab_pis[,i], rep(i, 2))
+cont_cl_mi = post_hab$a_hab[,1] - post_hab$a_hab[,2]
+cont_cl_op = post_hab$a_hab[,1] - post_hab$a_hab[,3]
+cont_mi_op = post_hab$a_hab[,2] - post_hab$a_hab[,3]
+plot(lapply(list(cont_cl_mi, cont_cl_op, cont_mi_op), mean), 1:3, 
+     xlim = c(-2, 2), xlab = 'contrast [log-odds]', yaxt = 'n', ylab = '')
+for(i in 1:3) lines(lapply(list(cont_cl_mi, cont_cl_op, cont_mi_op), PI)[[i]], rep(i, 2))
+abline(v = 0, lty = 2)
+axis(2, 1:3, c('closed vs mixed', 'closed vs open', 'mixed vs open'))
+dev.off()

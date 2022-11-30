@@ -201,7 +201,40 @@ fit_nice_phylo = fit$output_files() |>
 precis(fit_nice_phylo)
 post_phylo = extract.samples(fit_nice_phylo)
 
+# Model habitat ----
+
+# Subset data
+cc_dat = dat[!is.na(dat$habitat),]
+
+# Translate species and genus
+genus_trans = 1:length(unique(cc_dat$genus))
+names(genus_trans) = unique(cc_dat$genus)
+cc_dat$genus_index = genus_trans[cc_dat$genus]
+
+# Compile data
+clean_dat = list(N_obs = nrow(cc_dat),
+                 N_genera = max(cc_dat$genus_index),
+                 mimic = cc_dat$vocal,
+                 habitat = c(closed = 1, mixed = 2, open = 3)[cc_dat$habitat] |> as.numeric(),
+                 genus = cc_dat$genus_index)
+
+str(clean_dat)
+
+model = cmdstan_model('ANALYSIS/CODE/models/habitat_to_presence.stan')
+fit = model$sample(data = clean_dat, 
+                   seed = 1, 
+                   chains = 4, 
+                   parallel_chains = 4,
+                   refresh = 500,
+                   adapt_delta = 0.99,
+                   max_treedepth = 15) 
+fit_nice_hab = fit$output_files() |>
+  rstan::read_stan_csv()
+precis(fit_nice_hab)
+
+post_hab = extract.samples(fit_nice_hab)
+
 # Save ----
-save(post_long, post_brain, post_soc, post_body, post_phylo,
-     fit_nice_long, fit_nice_brain, fit_nice_soc, fit_nice_body, fit_nice_phylo,
+save(post_long, post_brain, post_soc, post_body, post_phylo, post_hab, 
+     fit_nice_long, fit_nice_brain, fit_nice_soc, fit_nice_body, fit_nice_phylo, fit_nice_hab,
      file = path_models_presence)
