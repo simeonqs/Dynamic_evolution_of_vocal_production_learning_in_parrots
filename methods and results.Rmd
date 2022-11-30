@@ -27,7 +27,7 @@ load(path_cleaned_data_long)
 
 ## Statistical analysis
 
-First we tried to understand what explained the presence of vocal mimicry across the parrot order. We ran ancestral state reconstruction with the function `contMap` from the package *phytools* [@phytools]. We also ran a Bayesian model to test the strength of the phylogenetic model. We modelled the probability of a species being able to mimic and included a variance-covariance matrix with the covariance as a function of the phylogenetic distance, using the L2-norm. We used Stan to define the models [@gelman2015stan] and the package *cmdstanr* to fit [@cmstanr] with four chains, 1000 burn-in and 1000 sample iterations, and `adapt_delta = 0.95`. We used R-hat to monitor model convergence and report any deviation outside 0.99-1.01 in the results section. 
+First we tried to understand what explained the presence of vocal mimicry across the parrot order. We ran ancestral state reconstruction with the function `contMap` from the package *phytools* [@phytools]. We also ran a Bayesian model to test the strength of the phylogenetic model. We modelled the probability of a species being able to mimic and included a variance-covariance matrix with the covariance as a function of the phylogenetic distance, using the L2-norm. We used Stan to define the models [@gelman2015stan] and the package *cmdstanr* to fit [@cmstanr] with four chains, 1000 burn-in and 1000 sample iterations, `max_treedepth = 15` and `adapt_delta = 0.99`. We used R-hat to monitor model convergence and report any deviation outside 0.99-1.01 in the results section. 
 
 $$\begin{aligned}
 M & \sim \text{binomial}(1,\ p) & M = \text{mimicry or not}\\
