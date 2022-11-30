@@ -1,7 +1,7 @@
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 # Project: parrot vocal mimicry
 # Date started: 10-11-2022
-# Date last modified: 28-11-2022
+# Date last modified: 30-11-2022
 # Author: Simeon Q. Smeele
 # Description: Modelling the presence of mimicry. 
 # source('ANALYSIS/CODE/02_model_presence.R')
@@ -66,12 +66,13 @@ fit = model$sample(data = clean_dat,
                    chains = 4, 
                    parallel_chains = 4,
                    refresh = 500,
-                   adapt_delta = 0.95) 
-fit_nice = fit$output_files() %>%
+                   adapt_delta = 0.99,
+                   max_treedepth = 15) 
+fit_nice_long = fit$output_files() |>
   rstan::read_stan_csv()
-precis(fit_nice)
+precis(fit_nice_long)
 
-post_long = extract.samples(fit_nice)
+post_long = extract.samples(fit_nice_long)
 
 # Model brain ----
 
@@ -106,12 +107,13 @@ fit = model$sample(data = clean_dat,
                    chains = 4, 
                    parallel_chains = 4,
                    refresh = 500,
-                   adapt_delta = 0.95) 
-fit_nice = fit$output_files() %>%
+                   adapt_delta = 0.99,
+                   max_treedepth = 15) 
+fit_nice_brain = fit$output_files() |>
   rstan::read_stan_csv()
-precis(fit_nice)
+precis(fit_nice_brain)
 
-post_brain = extract.samples(fit_nice)
+post_brain = extract.samples(fit_nice_brain)
 
 # Model sociality ----
 
@@ -138,12 +140,13 @@ fit = model$sample(data = clean_dat,
                    chains = 4, 
                    parallel_chains = 4,
                    refresh = 500,
-                   adapt_delta = 0.95) 
-fit_nice = fit$output_files() %>%
+                   adapt_delta = 0.99,
+                   max_treedepth = 15) 
+fit_nice_soc = fit$output_files() |>
   rstan::read_stan_csv()
-precis(fit_nice)
+precis(fit_nice_soc)
 
-post_soc = extract.samples(fit_nice)
+post_soc = extract.samples(fit_nice_soc)
 
 # Model brain ----
 
@@ -170,12 +173,13 @@ fit = model$sample(data = clean_dat,
                    chains = 4, 
                    parallel_chains = 4,
                    refresh = 500,
-                   adapt_delta = 0.95) 
-fit_nice = fit$output_files() %>%
+                   adapt_delta = 0.99,
+                   max_treedepth = 15) 
+fit_nice_body = fit$output_files() |>
   rstan::read_stan_csv()
-precis(fit_nice)
+precis(fit_nice_body)
 
-post_body = extract.samples(fit_nice)
+post_body = extract.samples(fit_nice_body)
 
 # Phylogenetic model ----
 clean_dat = list(mimic = dat$vocal,
@@ -187,13 +191,17 @@ fit = model$sample(data = clean_dat,
                    chains = 4, 
                    parallel_chains = 4,
                    refresh = 100,
-                   adapt_delta = 0.95) 
+                   iter_warmup = 1500,
+                   iter_sampling = 1500,
+                   adapt_delta = 0.99,
+                   max_treedepth = 15) 
 
-fit_nice = fit$output_files() %>%
+fit_nice_phylo = fit$output_files() |>
   rstan::read_stan_csv()
-precis(fit_nice)
-post_phylo = extract.samples(fit_nice)
+precis(fit_nice_phylo)
+post_phylo = extract.samples(fit_nice_phylo)
 
 # Save ----
-save(post_long, post_brain, post_soc, post_body, post_phylo, file = path_models_presence)
-
+save(post_long, post_brain, post_soc, post_body, post_phylo,
+     fit_nice_long, fit_nice_brain, fit_nice_soc, fit_nice_body, fit_nice_phylo,
+     file = path_models_presence)
