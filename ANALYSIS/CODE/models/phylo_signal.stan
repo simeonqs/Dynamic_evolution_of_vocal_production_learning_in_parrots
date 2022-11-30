@@ -1,11 +1,10 @@
 // Parrot mimicry
 // Simeon Q. Smeele
 // Started: 30-08-2022
-// Last modified: 31-08-2022
+// Last modified: 30-11-2022
 // Description: Test if we can get a phylogentic signal estimated. 
 
 functions{
-
 
     matrix cov_GPL2(matrix x, real sq_alpha, real sq_rho, real delta) {
         int N = dims(x)[1];
@@ -23,9 +22,9 @@ functions{
 }
 
 data {
-  int<lower=0> N_species;
-  int mimic[N_species];
-  matrix[N_species,N_species] dmat;
+  int<lower=0> N_species; # number of observations
+  int mimic[N_species]; # 0/1
+  matrix[N_species,N_species] dmat; # normalised phylogenetic distance
 }
 
 parameters {
@@ -41,14 +40,10 @@ model {
   matrix[N_species,N_species] SIGMA;
   a_bar ~ normal(0, 1);
   rhosq ~ exponential( 0.1 );
-  etasq ~ exponential( 2 );
+  etasq ~ exponential( 1 );
   SIGMA = cov_GPL2(dmat, etasq, rhosq, 0.01);
   for(n in 1:N_species) mu[n] = a_bar;
   q ~ multi_normal(mu, SIGMA);
   for(n in 1:N_species) p[n] = inv_logit(q[n]);
   mimic ~ binomial(1, p);
 }
-
-
-
-
