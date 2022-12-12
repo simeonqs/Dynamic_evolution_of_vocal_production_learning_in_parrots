@@ -1,7 +1,7 @@
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 # Project: parrot vocal mimicry
 # Date started: 10-11-2022
-# Date last modified: 11-11-2022
+# Date last modified: 12-12-2022
 # Author: Simeon Q. Smeele
 # Description: Modelling the number of unique mimics.  
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -120,6 +120,22 @@ for(i in 1:20) lines(lims,
 mtext('body size [g]', 1, 2.5, cex = 0.75)
 mtext('number of unique mimics', 2, 2.5, cex = 0.75)
 
-
 # Close PDF
+dev.off()
+
+# Habitat output
+pdf('ANALYSIS/RESULTS/habitat results - nr unique mimics.pdf', 5, 5)
+a_hab_means = post_hab$a_hab |> apply(2, mean) |> exp()
+a_hab_pis = post_hab$a_hab |> apply(2, PI) |> exp()
+plot(a_hab_means, 1:3, xlim = c(0, 5), xlab = 'n unique mimics', yaxt = 'n', ylab = '')
+axis(2, 1:3, c('closed', 'mixed', 'open'))
+for(i in 1:3) lines(a_hab_pis[,i], rep(i, 2))
+cont_cl_mi = post_hab$a_hab[,1] - post_hab$a_hab[,2]
+cont_cl_op = post_hab$a_hab[,1] - post_hab$a_hab[,3]
+cont_mi_op = post_hab$a_hab[,2] - post_hab$a_hab[,3]
+plot(lapply(list(cont_cl_mi, cont_cl_op, cont_mi_op), mean), 1:3, 
+     xlim = c(-1, 1), xlab = 'contrast [log-scale]', yaxt = 'n', ylab = '')
+for(i in 1:3) lines(lapply(list(cont_cl_mi, cont_cl_op, cont_mi_op), PI)[[i]], rep(i, 2))
+abline(v = 0, lty = 2)
+axis(2, 1:3, c('closed vs mixed', 'closed vs open', 'mixed vs open'))
 dev.off()
