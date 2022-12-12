@@ -25,9 +25,9 @@ model{
   // Main model
   a_bar ~ normal(0, 1);
   sigma_genus ~ exponential(2);
+  z_genus ~ normal(0, 1);
   z_hab ~ normal(0, 1);
   sigma_hab ~ exponential(2);
-  z_genus ~ normal(0, 1);
   for(i in 1:N_obs){
     p[i] = a_bar + 
       z_genus[genus[i]] * sigma_genus + 
@@ -38,6 +38,5 @@ model{
 }
 generated quantities{
   vector[3] a_hab;
-  real cont_hab;
   a_hab = a_bar + z_hab * sigma_hab;
 }
