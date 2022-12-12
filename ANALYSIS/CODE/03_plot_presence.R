@@ -1,7 +1,7 @@
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 # Project: parrot vocal mimicry
 # Date started: 11-11-2022
-# Date last modified: 26-11-2022
+# Date last modified: 12-12-2022
 # Author: Simeon Q. Smeele
 # Description: Plotting the outcomes of the presence models.   
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -141,7 +141,7 @@ for(i in 1:20){
 dev.off()
 
 # Habitat output
-pdf('ANALYSIS/RESULTS/habitat results.pdf', 5, 5)
+pdf('ANALYSIS/RESULTS/habitat results - presence.pdf', 5, 5)
 a_hab_means = post_hab$a_hab |> apply(2, mean) |> inv_logit()
 a_hab_pis = post_hab$a_hab |> apply(2, PI) |> inv_logit()
 plot(a_hab_means, 1:3, xlim = c(0, 1), xlab = 'probability mimicry', yaxt = 'n', ylab = '')
