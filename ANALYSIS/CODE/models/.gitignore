@@ -8,3 +8,11 @@ longevity_to_presence
 sociality_to_presence
 phylo_signal
 habitat_to_presence
+body_to_quality
+brain_to_quality
+context_to_quality
+habitat_to_nr_unique
+habitat_to_quality
+longevity_to_quality
+sociality_to_quality
+template_to_quality
