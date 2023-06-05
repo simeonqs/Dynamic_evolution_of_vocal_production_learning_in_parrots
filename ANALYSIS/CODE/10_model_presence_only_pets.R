@@ -1,7 +1,7 @@
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 # Project: parrot vocal mimicry
 # Date started: 10-11-2022
-# Date last modified: 11-12-2022
+# Date last modified: 02-06-2023
 # Author: Simeon Q. Smeele
 # Description: Modelling the presence of mimicry. 
 # This version includes species that are kept as pet. 
@@ -27,7 +27,8 @@ path_models_presence = 'ANALYSIS/RESULTS/models_presence_pets_only.RData'
 load(path_cleaned_data)
 
 # Subset
-dat = dat[which(dat$pet == 1),]
+keep = which(dat$CITEStrade != 'no' & dat$WPTpet != 'no')
+dat = dat[keep,]
 
 # Model longevity ----
 

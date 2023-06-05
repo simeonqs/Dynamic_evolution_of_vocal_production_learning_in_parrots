@@ -1,7 +1,7 @@
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 # Project: parrot vocal mimicry
 # Date started: 11-11-2022
-# Date last modified: 11-12-2022
+# Date last modified: 05-06-2023
 # Author: Simeon Q. Smeele
 # Description: Plotting the outcomes of the presence models.  
 # This version is for pets only.
@@ -33,7 +33,8 @@ load(path_cleaned_data)
 load(path_models_presence)
 
 # Subset
-dat = dat[which(dat$pet == 1),]
+keep = which(dat$CITEStrade != 'no' & dat$WPTpet != 'no')
+dat = dat[keep,]
 
 # Open PDF
 pdf(path_pdf, 6, 5)
@@ -73,7 +74,7 @@ for(i in 1:20) lines(lims,
                      inv_logit(sample(post_long$a_bar, 1) + sample(post_long$b_long, 1) * lims),
                      col = alpha(cols[1], 0.8), lwd = 5)
 mtext('life expectancy [y]', 1, 2.5, cex = 0.75)
-mtext('probability of mimicry', 2, 2.5, cex = 0.75)
+mtext('probability of VPL', 2, 2.5, cex = 0.75)
 ## brain size
 var = post_brain$rel_brain %>% apply(2, mean)
 mean_var = mean(var, na.rm = T)
@@ -90,7 +91,7 @@ for(i in 1:20) lines(lims,
                      inv_logit(sample(post_brain$a_bar, 1) + sample(post_brain$b_brain, 1) * lims),
                      col = alpha(cols[2], 0.8), lwd = 5)
 mtext('relative brain size [sd]', 1, 2.5, cex = 0.75)
-mtext('probability of mimicry', 2, 2.5, cex = 0.75)
+mtext('probability of VPL', 2, 2.5, cex = 0.75)
 ## sociality
 par(mar = c(0.5, 4.5, 2.5, 0.5))
 var = dat$gregar 
@@ -106,7 +107,7 @@ for(i in 1:20) lines(lims,
                      inv_logit(c(sample(post_soc$a_greg[,1], 1), sample(post_soc$a_greg[,2], 1))),
                      col = alpha(cols[3], 0.8), lwd = 5)
 mtext('gregarious', 1, 2.5, cex = 0.75)
-mtext('probability of mimicry', 2, 2.5, cex = 0.75)
+mtext('probability of VPL', 2, 2.5, cex = 0.75)
 ## body
 var = dat$log_mean_body_weight
 mean_var = mean(var, na.rm = T)
@@ -121,7 +122,7 @@ for(i in 1:20) lines(lims,
                      inv_logit(sample(post_body$a_bar, 1) + sample(post_body$b_body, 1) * lims),
                      col = alpha(cols[4], 0.8), lwd = 5)
 mtext('body size [g]', 1, 2.5, cex = 0.75)
-mtext('probability of mimicry', 2, 2.5, cex = 0.75)
+mtext('probability of VPL', 2, 2.5, cex = 0.75)
 
 
 # Close PDF
@@ -146,7 +147,7 @@ dev.off()
 pdf('ANALYSIS/RESULTS/habitat results.pdf', 5, 5)
 a_hab_means = post_hab$a_hab |> apply(2, mean) |> inv_logit()
 a_hab_pis = post_hab$a_hab |> apply(2, PI) |> inv_logit()
-plot(a_hab_means, 1:3, xlim = c(0, 1), xlab = 'probability mimicry', yaxt = 'n', ylab = '')
+plot(a_hab_means, 1:3, xlim = c(0, 1), xlab = 'probability of VPL', yaxt = 'n', ylab = '')
 axis(2, 1:3, c('closed', 'mixed', 'open'))
 for(i in 1:3) lines(a_hab_pis[,i], rep(i, 2))
 cont_cl_mi = post_hab$a_hab[,1] - post_hab$a_hab[,2]
