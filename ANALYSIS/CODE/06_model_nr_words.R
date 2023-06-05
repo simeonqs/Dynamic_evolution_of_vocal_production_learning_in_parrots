@@ -1,7 +1,7 @@
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 # Project: parrot vocal mimicry
 # Date started: 11-11-2022
-# Date last modified: 12-12-2022
+# Date last modified: 16-12-2022
 # Author: Simeon Q. Smeele
 # Description: Modelling the number of unique words.  
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -78,6 +78,8 @@ fit = model$sample(data = clean_dat,
                    seed = 1, 
                    chains = 4, 
                    parallel_chains = 4,
+                   iter_warmup = 1500,
+                   iter_sampling = 1500,
                    refresh = 500,
                    adapt_delta = 0.99,
                    max_treedepth = 15) 
@@ -133,7 +135,9 @@ fit = model$sample(data = clean_dat,
                    seed = 1, 
                    chains = 4, 
                    parallel_chains = 4,
-                   refresh = 500,
+                   iter_warmup = 1500,
+                   iter_sampling = 1500,
+                   refresh = 500,                   
                    adapt_delta = 0.99,
                    max_treedepth = 15) 
 fit_nice_brain = fit$output_files() |>
@@ -180,6 +184,8 @@ fit = model$sample(data = clean_dat,
                    seed = 1, 
                    chains = 4, 
                    parallel_chains = 4,
+                   iter_warmup = 1500,
+                   iter_sampling = 1500,
                    refresh = 500,
                    adapt_delta = 0.99,
                    max_treedepth = 15) 
@@ -227,6 +233,8 @@ fit = model$sample(data = clean_dat,
                    seed = 1, 
                    chains = 4, 
                    parallel_chains = 4,
+                   iter_warmup = 1500,
+                   iter_sampling = 1500,
                    refresh = 500,
                    adapt_delta = 0.99,
                    max_treedepth = 15) 
@@ -275,6 +283,8 @@ fit = model$sample(data = clean_dat,
                    seed = 1, 
                    chains = 4, 
                    parallel_chains = 4,
+                   iter_warmup = 1500,
+                   iter_sampling = 1500,
                    refresh = 500,
                    adapt_delta = 0.99,
                    max_treedepth = 15) 
