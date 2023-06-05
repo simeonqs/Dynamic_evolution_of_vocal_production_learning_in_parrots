@@ -1,12 +1,10 @@
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 # Project: parrot vocal mimicry
 # Date started: 10-11-2022
-# Date last modified: 12-12-2022
+# Date last modified: 05-06-2023
 # Author: Simeon Q. Smeele
 # Description: Modelling the number of unique mimics.  
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-# Set-up ----
 
 # Loading libraries
 libraries = c('tidyverse', 'rethinking', 'cmdstanr')
@@ -139,3 +137,22 @@ for(i in 1:3) lines(lapply(list(cont_cl_mi, cont_cl_op, cont_mi_op), PI)[[i]], r
 abline(v = 0, lty = 2)
 axis(2, 1:3, c('closed vs mixed', 'closed vs open', 'mixed vs open'))
 dev.off()
+
+# Create PDF with raw variation in 10 most common species
+tab_species = dat_long$species |> table()
+enough_species = tab_species[tab_species >= 10]
+set.seed(1)
+ten_species = enough_species |> sample(10) |> names() |> sort(decreasing = FALSE)
+trans_species = seq_along(ten_species)
+names(trans_species) = ten_species
+pdf('ANALYSIS/RESULTS/within species variation.pdf', 7, 10)
+par(mar = c(4, 10, 1, 1))
+sub = dat_long[dat_long$species %in% ten_species,]
+plot(as.integer(sub$distinctmimic), trans_species[sub$species] + rnorm(nrow(sub), 0, 0.05),
+     yaxt = 'n', xlab = 'number of unique mimics', ylab = '')
+for(i in unique(trans_species[sub$species])) 
+  vioplot(as.integer(sub$distinctmimic)[trans_species[sub$species] == i], at = i,
+          horizontal = TRUE, add = TRUE, col = alpha(1, 0.5), pchMed = 3)
+axis(2, trans_species, names(trans_species), las = 2)
+dev.off()
+
