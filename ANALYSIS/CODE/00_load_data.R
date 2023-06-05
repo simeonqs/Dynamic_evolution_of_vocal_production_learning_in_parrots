@@ -1,7 +1,7 @@
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 # Project: parrot vocal mimicry
 # Date started: 27-08-2022
-# Date last modified: 11-11-2022
+# Date last modified: 02-06-2023
 # Author: Simeon Q. Smeele
 # Description: Loading the data and plotting a phylogenetic tree. 
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -21,8 +21,9 @@ for(lib in libraries){
 rm(list = ls()) 
 
 # Paths
-path_overview = 'ANALYSIS/DATA/parrot_vocalmimic_socioecol.xlsx'
-path_extended = 'ANALYSIS/DATA/parrot_vocalmimic_detailed_updated_withoutfilter.xlsx'
+path_overview = 'ANALYSIS/DATA/parrot_vocalmimic_socioecol.xlsx' # data per species
+path_cites_wpt = 'ANALYSIS/DATA/parrot_vpl_overview.xlsx' # contains CITES and WPT pet data
+path_extended = 'ANALYSIS/DATA/parrot_vocalmimic_detailed_updated_withoutfilter.xlsx' # data per ind
 path_tree = 'ANALYSIS/DATA/5.ParrotSupertree.tre'
 path_cleaned_data = 'ANALYSIS/RESULTS/cleaned_data.RData'
 path_cleaned_data_long = 'ANALYSIS/RESULTS/cleaned_data_long.RData'
@@ -38,6 +39,13 @@ path_taxonomy = 'ANALYSIS/DATA/IUCN translation list 01 _ manual added.csv'
 
 # Load data
 dat = as.data.frame(read_xlsx(path_overview, na = 'NA'))
+
+# Merge CITES and WPT pet data
+cites_wpt = as.data.frame(read_xlsx(path_cites_wpt, na = 'NA'))
+first = cites_wpt$`Scientific name` |> strsplit(' ') |> sapply(`[`, 1) |> str_to_title()
+second = cites_wpt$`Scientific name` |> strsplit(' ') |> sapply(`[`, 2) 
+cites_wpt$scinam = paste(first, second, sep = '_')
+dat = merge(dat, cites_wpt[,c('scinam', 'CITEStrade', 'WPTpet')], by = 'scinam', all.x = T, all.y = F)
 
 # Load tree
 tree = read.tree(path_tree)
