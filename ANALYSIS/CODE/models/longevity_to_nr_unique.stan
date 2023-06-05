@@ -1,7 +1,7 @@
 // Parrot mimicry
 // Simeon Q. Smeele
 // Started: 10-11-2022
-// Last modified: 10-11-2022
+// Last modified: 16-11-2022
 // Description: Model to estimate the effect of longevity. 
 
 functions{
@@ -118,10 +118,4 @@ model{
     b_body * stand_body[species[i]] + 
     b_brain * (brain_merge[species[i]] - pred_brain[species[i]]);
   n_mimic ~ poisson(exp(lambda));
-}
-generated quantities{
-  vector[2] a_greg;
-  real cont_greg;
-  a_greg = z_greg * sigma_greg;
-  cont_greg = a_greg[2] - a_greg[1];
 }
