@@ -33,7 +33,7 @@ load(path_cleaned_data)
 load(path_models_presence)
 
 # Subset
-keep = which(dat$CITEStrade != 'no' & dat$WPTpet != 'no')
+keep = which(dat$CITEStrade != 'no' | dat$WPTpet != 'no')
 dat = dat[keep,]
 
 # Open PDF
