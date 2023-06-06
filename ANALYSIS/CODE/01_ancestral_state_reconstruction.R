@@ -1,7 +1,7 @@
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 # Project: parrot vocal mimicry
 # Date started: 09-11-2022
-# Date last modified: 09-11-2022
+# Date last modified: 05-06-2023
 # Author: Simeon Q. Smeele
 # Description: Running a simple ancestral state reconstruction for the mimicry ability.  
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -30,12 +30,16 @@ path_functions = 'ANALYSIS/CODE/functions'
 
 # Load data
 load(path_cleaned_data)
+dat$WPTpet = ifelse(is.na(dat$WPTpet), 'rare', dat$WPTpet)
+dat$CITEStrade = ifelse(is.na(dat$CITEStrade), 'no', dat$CITEStrade)
 
 # Run ASR
 ph = data.frame(value = dat$vocal)
 rownames(ph) = tree$tip.label
 svl = as.matrix(ph)[,1]
 obj = contMap(tree, svl, outline = FALSE, plot = F)
+
+# Plot first tree ----
 
 # Open PDF
 pdf(path_pdf_tree, 15, 15)
@@ -49,7 +53,7 @@ obj$cols[1:n] = colorRampPalette(c('#1A237E', '#0D47A1', '#2E86C1', '#5DADE2',
                                    '#EC7063', '#E74C3C', '#CB4335', '#B03A2E', '#CB4335', '#B71C1C'), 
                                  space = 'Lab')(n)
 
-plot(obj, type = 'fan', outline = F, fsize = c(0.01, 1), mar = c(10, 5, 5, 10), legend = F)
+plot(obj, type = 'fan', outline = F, fsize = c(0.01, 1), mar = c(10, 5, 7, 10), legend = F)
 
 # Get the name and the y position of each label
 label_data = list()
@@ -102,20 +106,36 @@ unique_genera = unique_genera[label_data$xend - label_data$xstart > 0]
 label_data = label_data[label_data$xend - label_data$xstart > 0,]
 
 g = ggplot() +       
-  geom_segment(data = label_data, aes(x = xstart, xend = xend, y = 13, yend = 13))+
-  ylim(-110, 25) + 
+  geom_segment(data = label_data, aes(x = xstart, xend = xend, y = 13, yend = 13)) +
+  ylim(-110, 24) + 
   xlim(0, 397) + 
   theme_minimal() +
   theme(
     axis.text = element_blank(),
     axis.title = element_blank(),
     panel.grid = element_blank(),
-    plot.margin = unit(c(-2, 0.5, 0.5, -2), "cm")
+    plot.margin = unit(c(-0.9, 0.5, 0.5, -2), "cm")
   ) +
-  coord_polar(start = pi + pi/2 + pi/nrow(dat) - 0.01, direction = -1) +
+  coord_polar(start = pi + pi/2 + pi/nrow(dat) - 0.013, direction = -1) +
   geom_text(data = label_data, aes(x = id + 0.5, y = 15, label = unique_genera, hjust = hjust), 
             color = 'black', alpha = 0.6, size = 5, 
             angle = label_data$angle, inherit.aes = FALSE ) 
+print(g, newpage = FALSE)
+
+g = ggplot() +       
+  geom_col(data = data.frame(x = seq_len(nrow(dat)),
+                             y = ifelse(dat$CITEStrade == 'no' & dat$WPTpet == 'no', 0, 1)), 
+           aes(x, y)) +
+  ylim(-110, 12.5) + 
+  xlim(0, 398) + 
+  theme_minimal() +
+  theme(
+    axis.text = element_blank(),
+    axis.title = element_blank(),
+    panel.grid = element_blank(),
+    plot.margin = unit(c(-0.9, 0.5, 0.5, -2), "cm")
+  ) +
+  coord_polar(start = pi + pi/2 + pi/nrow(dat) - 0.013, direction = -1)
 print(g, newpage = FALSE)
 
 # Save pdf
