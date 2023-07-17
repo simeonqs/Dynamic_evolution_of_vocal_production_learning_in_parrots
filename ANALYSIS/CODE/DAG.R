@@ -3,51 +3,51 @@ library(rethinking)
 pdf('ANALYSIS/RESULTS/DAG.pdf')
 
 dag = dagitty('dag{
-              AFR -> Mimicry;
+              AFR -> VPL;
               AFR -> RelBrainSize;
               AFR -> Longevity;
-              Sociality -> Mimicry;
+              Sociality -> VPL;
               Sociality -> RelBrainSize;
               Sociality -> Longevity;
-              RelBrainSize -> Mimicry;
+              RelBrainSize -> VPL;
               RelBrainSize -> Longevity;
-              BodySize -> Mimicry;
+              BodySize -> VPL;
               BodySize -> Longevity;
               BodySize -> AFR;
-              Longevity -> Mimicry}') 
+              Longevity -> VPL}') 
 drawdag(dag)
 
 dag = dagitty('dag{
-              Sociality -> MimicryPresent;
+              Sociality -> VPLPresent;
               Sociality -> RelBrainSize;
               Sociality -> Longevity;
               Sociality -> Quality;
-              Sociality -> NumMimics;
-              Context -> MimicryDetected;
-              Context -> NumMimicsObs;
+              Sociality -> RepertoireSize;
+              Context -> VPLDetected;
+              Context -> RepertoireSizeObs;
               Context -> Quality;
               Context -> Template;
-              Template -> MimicryDetected;
-              Template -> NumMimicsObs;
+              Template -> VPLDetected;
+              Template -> RepertoireSizeObs;
               Template -> Quality;
-              Quality -> MimicryDetected;
-              RelBrainSize -> MimicryPresent;
+              Quality -> VPLDetected;
+              RelBrainSize -> VPLPresent;
               RelBrainSize -> Longevity;
-              RelBrainSize -> NumMimics;
+              RelBrainSize -> RepertoireSize;
               RelBrainSize -> Quality;
               RelBrainSize -> Longevity;
               BodySize -> Quality;
               BodySize -> Longevity;
               BodySize -> Context;
-              Longevity -> MimicryPresent;
-              Longevity -> NumMimics;
+              Longevity -> VPLPresent;
+              Longevity -> RepertoireSize;
               Longevity -> Quality;
-              NumMimics -> MimicryDetected;
-              MimicryPresent -> MimicryDetected;
-              Time -> MimicryDetected;
-              Time -> NumMimicsObs;
-              NumMimics -> NumMimicsObs;
-              Quality -> NumMimicsObs
+              RepertoireSize -> VPLDetected;
+              VPLPresent -> VPLDetected;
+              Time -> VPLDetected;
+              Time -> RepertoireSizeObs;
+              RepertoireSize -> RepertoireSizeObs;
+              Quality -> RepertoireSizeObs
               }') 
 drawdag(dag)
 
