@@ -1,7 +1,7 @@
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 # Project: parrot vocal mimicry
 # Date started: 09-11-2022
-# Date last modified: 05-06-2023
+# Date last modified: 20-06-2023
 # Author: Simeon Q. Smeele
 # Description: Running a simple ancestral state reconstruction for the mimicry ability.  
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
@@ -39,12 +39,7 @@ rownames(ph) = tree$tip.label
 svl = as.matrix(ph)[,1]
 obj = contMap(tree, svl, outline = FALSE, plot = F)
 
-# Plot first tree ----
-
-# Open PDF
-pdf(path_pdf_tree, 15, 15)
-
-# Plot
+# Change colour
 ## what is the length of the current color ramp?
 n = length(obj$cols)
 ## change to blue -> red
@@ -53,6 +48,12 @@ obj$cols[1:n] = colorRampPalette(c('#1A237E', '#0D47A1', '#2E86C1', '#5DADE2',
                                    '#EC7063', '#E74C3C', '#CB4335', '#B03A2E', '#CB4335', '#B71C1C'), 
                                  space = 'Lab')(n)
 
+# Plot first tree ----
+
+# Open PDF
+pdf(path_pdf_tree, 15, 15)
+
+# Plot
 plot(obj, type = 'fan', outline = F, fsize = c(0.01, 1), mar = c(10, 5, 7, 10), legend = F)
 
 # Get the name and the y position of each label
@@ -152,15 +153,23 @@ dev.off()
 
 pdf(path_pdf_tree_names, 15, 15)
 
-## what is the length of the current color ramp?
-n = length(obj$cols)
-## change to blue -> red
-obj$cols[1:n] = colorRampPalette(c('#1A237E', '#0D47A1', '#2E86C1', '#5DADE2', 
-                                   '#F9E79F',
-                                   '#EC7063', '#E74C3C', '#CB4335', '#B03A2E', '#CB4335', '#B71C1C'), 
-                                 space = 'Lab')(n)
-
 plot(obj, type = 'fan', outline = F, fsize = c(0.5, 1), legend = F)
+
+g = ggplot() +       
+  geom_col(data = data.frame(x = seq_len(nrow(dat)),
+                             y = ifelse(dat$CITEStrade == 'no' & dat$WPTpet == 'no', 0, 1)), 
+           aes(x, y)) +
+  ylim(-110, 12.5) + 
+  xlim(0, 398) + 
+  theme_minimal() +
+  theme(
+    axis.text = element_blank(),
+    axis.title = element_blank(),
+    panel.grid = element_blank(),
+    plot.margin = unit(c(-1.3, -1.35, -1.35, -1.45), "cm")
+  ) +
+  coord_polar(start = pi + pi/2 + pi/nrow(dat) - 0.013, direction = -1)
+print(g, newpage = FALSE)
 
 dev.off()
 
