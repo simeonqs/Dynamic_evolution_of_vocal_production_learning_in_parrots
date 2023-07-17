@@ -61,14 +61,14 @@ par(mar = c(2.5, 4.5, 0.5, 0.5))
 var = dat_long$log_mean_life_exp
 mean_var = mean(var, na.rm = T)
 sd_var = sd(var, na.rm = T)
-plot((var - mean_var) / sd_var, log10(dat_long$n_im),
+plot((var - mean_var) / sd_var, log10(dat_long$n_im + 1),
      pch = 16, col = alpha(1, 0.5), xaxt = 'n', yaxt = 'n',
      xlab = '', ylab = '')
 axis(1, c(-2, 0, 2), round(exp(c(-2, 0, 2) * sd_var + mean_var)))
-axis(2, seq(0, 2.5, 1), 10^(seq(0, 2.5, 1)))
+axis(2, c(0, log10(2), log10(11)), c(0, 1, 10))
 lims = seq(min((var - mean_var) / sd_var, na.rm = T), max((var - mean_var) / sd_var, na.rm = T), 0.1)
 for(i in 1:20) lines(lims, 
-                     log10(exp(sample(post_long$a_bar, 1) + sample(post_long$b_long, 1) * lims)),
+                     log10(exp(sample(post_long$a_bar, 1) + sample(post_long$b_long, 1) * lims) + 1),
                      col = alpha(cols[1], 0.8), lwd = 5)
 mtext('life expectancy [y]', 1, 2.5, cex = 0.75)
 mtext('number of unique mimics', 2, 2.5, cex = 0.75)
@@ -78,14 +78,14 @@ mean_var = mean(var, na.rm = T)
 sd_var = sd(var, na.rm = T)
 plot((var - mean_var) / sd_var, log10(dat_long[!is.na(dat_long$n_im) &
                                                  !is.na(dat_long$log_mean_body_weight) &
-                                                 !is.na(dat_long$gregar),]$n_im),
+                                                 !is.na(dat_long$gregar),]$n_im + 1),
      pch = 16, col = alpha(1, 0.5), xaxt = 'n', yaxt = 'n',
      xlab = '', ylab = '')
 axis(1, c(-2, 0, 2), c(-2, 0, 2))
-axis(2, seq(0, 2.5, 1), 10^(seq(0, 2.5, 1)))
+axis(2, c(0, log10(2), log10(11)), c(0, 1, 10))
 lims = seq(min((var - mean_var) / sd_var, na.rm = T), max((var - mean_var) / sd_var, na.rm = T), 0.1)
 for(i in 1:20) lines(lims, 
-                     log10(exp(sample(post_brain$a_bar, 1) + sample(post_brain$b_brain, 1) * lims)),
+                     log10(exp(sample(post_brain$a_bar, 1) + sample(post_brain$b_brain, 1) * lims) + 1),
                      col = alpha(cols[2], 0.8), lwd = 5)
 mtext('relative brain size [sd]', 1, 2.5, cex = 0.75)
 mtext('number of unique mimics', 2, 2.5, cex = 0.75)
@@ -94,14 +94,14 @@ par(mar = c(0.5, 4.5, 2.5, 0.5))
 var = dat_long$gregar 
 mean_var = mean(var, na.rm = T)
 sd_var = sd(var, na.rm = T)
-plot(var + rnorm(nrow(dat_long), 0, 0.1), log10(dat_long$n_im),
+plot(var + rnorm(nrow(dat_long), 0, 0.1), log10(dat_long$n_im + 1),
      pch = 16, col = alpha(1, 0.5), xaxt = 'n', yaxt = 'n',
      xlab = '', ylab = '')
 axis(1, c(0, 1), c('no', 'yes'))
-axis(2, seq(0, 2.5, 1), 10^(seq(0, 2.5, 1)))
+axis(2, c(0, log10(2), log10(11)), c(0, 1, 10))
 lims = c(0, 1)
 for(i in 1:20) lines(lims, 
-                     log10(exp(c(sample(post_soc$a_greg[,1], 1), sample(post_soc$a_greg[,2], 1)))),
+                     log10(exp(c(sample(post_soc$a_greg[,1], 1), sample(post_soc$a_greg[,2], 1))) + 1),
                      col = alpha(cols[3], 0.8), lwd = 5)
 mtext('gregarious', 1, 2.5, cex = 0.75)
 mtext('number of unique mimics', 2, 2.5, cex = 0.75)
@@ -109,35 +109,17 @@ mtext('number of unique mimics', 2, 2.5, cex = 0.75)
 var = dat_long$log_mean_body_weight
 mean_var = mean(var, na.rm = T)
 sd_var = sd(var, na.rm = T)
-plot((var - mean_var) / sd_var, log10(dat_long$n_im),
+plot((var - mean_var) / sd_var, log10(dat_long$n_im + 1),
      pch = 16, col = alpha(1, 0.5), xaxt = 'n', yaxt = 'n',
      xlab = '', ylab = '')
 axis(1, c(-2, 0, 2), round(exp(c(-2, 0, 2) * sd_var + mean_var)))
-axis(2, seq(0, 2.5, 1), 10^(seq(0, 2.5, 1)))
+axis(2, c(0, log10(2), log10(11)), c(0, 1, 10))
 lims = seq(min((var - mean_var) / sd_var, na.rm = T), max((var - mean_var) / sd_var, na.rm = T), 0.1)
 for(i in 1:20) lines(lims, 
-                     log10(exp(sample(post_body$a_bar, 1) + sample(post_body$b_body, 1) * lims)),
+                     log10(exp(sample(post_body$a_bar, 1) + sample(post_body$b_body, 1) * lims) + 1),
                      col = alpha(cols[4], 0.8), lwd = 5)
 mtext('body size [g]', 1, 2.5, cex = 0.75)
 mtext('number of unique mimics', 2, 2.5, cex = 0.75)
 
 # Close PDF
 dev.off()
-
-# Habitat output
-pdf('ANALYSIS/RESULTS/habitat results - nr unique mimics - no words.pdf', 5, 5)
-a_hab_means = post_hab$a_hab |> apply(2, mean) |> exp()
-a_hab_pis = post_hab$a_hab |> apply(2, PI) |> exp()
-plot(a_hab_means, 1:3, xlim = c(0, 5), xlab = 'n unique mimics', yaxt = 'n', ylab = '')
-axis(2, 1:3, c('closed', 'mixed', 'open'))
-for(i in 1:3) lines(a_hab_pis[,i], rep(i, 2))
-cont_cl_mi = post_hab$a_hab[,1] - post_hab$a_hab[,2]
-cont_cl_op = post_hab$a_hab[,1] - post_hab$a_hab[,3]
-cont_mi_op = post_hab$a_hab[,2] - post_hab$a_hab[,3]
-plot(lapply(list(cont_cl_mi, cont_cl_op, cont_mi_op), mean), 1:3, 
-     xlim = c(-1, 1), xlab = 'contrast [log-scale]', yaxt = 'n', ylab = '')
-for(i in 1:3) lines(lapply(list(cont_cl_mi, cont_cl_op, cont_mi_op), PI)[[i]], rep(i, 2))
-abline(v = 0, lty = 2)
-axis(2, 1:3, c('closed vs mixed', 'closed vs open', 'mixed vs open'))
-dev.off()
-
