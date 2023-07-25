@@ -46,6 +46,7 @@ par(mar = rep(0.5, 4), oma = c(4.0, 0.5, 0.5, 0.5))
 # Densities
 effects = list(post_long$b_long, post_brain$b_brain, post_soc$cont_greg, post_body$b_body)
 for(i in 1:4){
+  message(sprintf('overlap 0: %s', round(length(which(effects[[i]]>0))/length(effects[[i]]), 2)))
   ylims = c(0, 7)
   plot(NULL, xlim = c(-1, 1), ylim = ylims, main = '', xlab = '', ylab = '', xaxt = 'n', yaxt = 'n')
   lines(c(0, 0), ylims, lty = 2, col = alpha(1, 0.5), lwd = 5)
@@ -66,7 +67,7 @@ plot((var - mean_var) / sd_var, log10(dat_long$n_im + 1),
      xlab = '', ylab = '')
 axis(1, c(-2, 0, 2), round(exp(c(-2, 0, 2) * sd_var + mean_var)))
 axis(2, c(0, log10(2), log10(11)), c(0, 1, 10))
-lims = seq(min((var - mean_var) / sd_var, na.rm = T), max((var - mean_var) / sd_var, na.rm = T), 0.1)
+lims = c(min((var - mean_var) / sd_var, na.rm = T), max((var - mean_var) / sd_var, na.rm = T))
 for(i in 1:20) lines(lims, 
                      log10(exp(sample(post_long$a_bar, 1) + sample(post_long$b_long, 1) * lims) + 1),
                      col = alpha(cols[1], 0.8), lwd = 5)
@@ -83,7 +84,7 @@ plot((var - mean_var) / sd_var, log10(dat_long[!is.na(dat_long$n_im) &
      xlab = '', ylab = '')
 axis(1, c(-2, 0, 2), c(-2, 0, 2))
 axis(2, c(0, log10(2), log10(11)), c(0, 1, 10))
-lims = seq(min((var - mean_var) / sd_var, na.rm = T), max((var - mean_var) / sd_var, na.rm = T), 0.1)
+lims = c(min((var - mean_var) / sd_var, na.rm = T), max((var - mean_var) / sd_var, na.rm = T))
 for(i in 1:20) lines(lims, 
                      log10(exp(sample(post_brain$a_bar, 1) + sample(post_brain$b_brain, 1) * lims) + 1),
                      col = alpha(cols[2], 0.8), lwd = 5)
@@ -114,7 +115,7 @@ plot((var - mean_var) / sd_var, log10(dat_long$n_im + 1),
      xlab = '', ylab = '')
 axis(1, c(-2, 0, 2), round(exp(c(-2, 0, 2) * sd_var + mean_var)))
 axis(2, c(0, log10(2), log10(11)), c(0, 1, 10))
-lims = seq(min((var - mean_var) / sd_var, na.rm = T), max((var - mean_var) / sd_var, na.rm = T), 0.1)
+lims = c(min((var - mean_var) / sd_var, na.rm = T), max((var - mean_var) / sd_var, na.rm = T))
 for(i in 1:20) lines(lims, 
                      log10(exp(sample(post_body$a_bar, 1) + sample(post_body$b_body, 1) * lims) + 1),
                      col = alpha(cols[4], 0.8), lwd = 5)
@@ -123,3 +124,4 @@ mtext('number of unique mimics', 2, 2.5, cex = 0.75)
 
 # Close PDF
 dev.off()
+
