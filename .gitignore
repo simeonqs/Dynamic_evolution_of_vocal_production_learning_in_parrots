@@ -9,3 +9,14 @@
 methods*
 model definitions.docx
 ANALYSIS/CODE/ARCHIVE
+ANALYSIS/CODE/models/body_to_presence
+ANALYSIS/CODE/models/brain_to_presence
+ANALYSIS/CODE/models/longevity_to_presence
+ANALYSIS/CODE/models/phylo_signal
+ANALYSIS/CODE/models/sociality_to_presence
+ANALYSIS/CODE/models/habitat_to_presence
+ANALYSIS/CODE/models/body_to_nr_unique
+ANALYSIS/CODE/models/brain_to_nr_unique
+ANALYSIS/CODE/models/habitat_to_nr_unique
+ANALYSIS/CODE/models/longevity_to_nr_unique
+ANALYSIS/CODE/models/sociality_to_nr_unique
