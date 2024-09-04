@@ -221,4 +221,4 @@ Running under: macOS Catalina 10.15.7
 ------------------------------------------------
 # Maintainers and contact
 
-Please contact Simeon Q. Smeele, <ssmeele@ab.mpg.de>, if you have any questions or suggestions. 
+Please contact Simeon Q. Smeele, <simeonqs@hotmail.com>, if you have any questions or suggestions. 
