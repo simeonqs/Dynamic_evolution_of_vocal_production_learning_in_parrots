@@ -37,23 +37,41 @@ All scripts are in `ANALYSIS/CODE`:
 
 - `models` contains all the Stan models
 	
-	- `body_to_nr_unique.stan` total effect of body size on number of unique mimics
+	- `body_to_nr_unique.stan` total effect of body size on the number of unique mimics
 	
 	- `body_to_presence.stan` total effect of body size on the presence of mimicry
 	
-	- `brain_to_nr_unique.stan` total effect of relative brain size on number of unique mimics
+	- `body_to_quality.stan` total effect of body size on the quality fo mimicry
+	
+	- `brain_to_nr_unique.stan` total effect of relative brain size on the number of unique mimics
 	
 	- `brain_to_presence.stan` total effect of relative brain size on the presence of mimicry
 	
-	- `longevity_to_nr_unique.stan` total effect of life expectancy on number of unique mimics
+	- `brain_to_quality.stan` total effect of relative brain size on the quality of mimicry
+	
+	- `context_to_quality.stan` total effect of the context on the quality of mimicry
+	
+	- `habitat_to_nr_unique.stan` total effect of habitat on the number of unique mimics
+	
+	- `habitat_to_presence.stan` total effect of habitat on the presence of mimicry
+	
+	- `habitat_to_quality.stan` total effect of habitat on the quality of mimicry
+	
+	- `longevity_to_nr_unique.stan` total effect of life expectancy on the number of unique mimics
 	
 	- `longevity_to_presence.stan` total effect of life expectancy on the presence of mimicry
 	
+	- `longevity_to_quality.stan` total effect of life expectancy on the quality of mimicry
+	
 	- `phylo_signal.stan` phylogenetic signal on the presence of mimicry
 	
-	- `sociality_to_nr_unique.stan` total effect of sociality on number of unique mimics
+	- `sociality_to_nr_unique.stan` total effect of sociality on the number of unique mimics
 	
 	- `sociality_to_presence.stan` total effect of sociality on the presence of mimicry
+	
+	- `sociality_to_quality.stan` total effect of sociality on the quality of mimicry
+	
+	- `template_to_quality.stan` total effect of whether or not a template was provided on the quality of mimicry
 	
 - `00_load_data.R` loads the raw data, cleans it and saves several RData in `RESULTS` objects for later steps
 
@@ -63,7 +81,7 @@ All scripts are in `ANALYSIS/CODE`:
 
 - `03_plot_presence.R` plots the results of step 02
 
-- `04_model_nr_unique.R` runs the models for number of unique mimics
+- `04_model_nr_unique.R` runs the models for the number of unique mimics
 
 - `05_plot_nr_unique.R` plots the results of step 04
 
@@ -71,13 +89,31 @@ All scripts are in `ANALYSIS/CODE`:
 
 - `07_plot_nr_words.R` plots the results for step 06
 
-- `08_model_checks.R` checks the Rhat values for all models
+- `08_model_quality.R` runs the models for the quality of mimicry
+
+- `09_table_quality_results.R` creates table for the results of step 08
+
+- `10_model_presence_only_pets.R` runs the models from step 02, but for the subset of the data where only species that are kept as pet are included
+
+- `11_plot_presence_only_pets.R` plots the results of step 10
+
+- `12_model_presence_video_only.R` runs the models from step 02, but for the subset of the data where only species with at least one YouTube video are included
+
+- `13_plot_presence_only_video.R` plots the results of step 12
+
+- `14_model_nr_unique_no_words.R` runs the models from step 04, excluding words from the count
+
+- `15_plot_nr_unique_no_words.R` plots the results of step 14
+
+- `16_model_checks.R` checks the Rhat values for all models
 
 - `DAG.R` creates the directed acyclic graph for the paper
   
 All data is in `ANALYSIS/DATA`:
 
-- `AFR`, `body weight`, `brain size` and `longevity` are downloaded from Smeele et al. (2022), see <https://github.com/simeonqs/Coevolution_of_relative_brain_size_and_life_expectancy_in_parrots> for meta data
+- the folders `AFR`, `body weight`, `brain size` and `longevity` are downloaded from Smeele et al. (2022), see <https://github.com/simeonqs/Coevolution_of_relative_brain_size_and_life_expectancy_in_parrots> for meta data
+
+- `5.ParrotSupertree.tre` phylogenetic tree
 
 - `IUCN translation list 01 _ manual added.csv` expanded version of the taxonomic translation table from Smeele et al. (2022)
 
@@ -87,8 +123,6 @@ All data is in `ANALYSIS/DATA`:
 	- `source` how the IUCN taxonomy was found: `exact_match` - found exactly the same on IUCN, `fuzzy_match` - found with few characters shuffled on ICUN, `manual_avibase` - found manually on Avibase, `synonym_match` - match to synonym listed by IUCN
 	- `notes` when species not found this explains why - often a species is a hybrid or is extinct
 	
-- `5.ParrotSupertree.tre` phylogenetic tree
-
 - `parrot_vocalmimic_detailed_updated_withoutfilter.xlsx` raw data with information per video
 
 	- `species` the latin name of the species 
@@ -116,7 +150,6 @@ All data is in `ANALYSIS/DATA`:
 	- `sex` the sex of the subject (if available in the video description) 
 	- `video_link` the link to the accessed video 
 	- `date_accessed_for_analysis` the date that the video was accessed for the video analysis
-
 	
 - `parrot_vocalmimic_socioecol.xlsx` raw data with single data point per species
 
@@ -130,7 +163,31 @@ All data is in `ANALYSIS/DATA`:
 	- `habitat` habitat type was classified as ‘open’ for species that occur in habitats such as savannah, grassland, shrubland, forest edges, arid and eucalypt woodland or cliffs, as ‘closed’ for species that occur in habitats such as forest, riverine forest, riparian forest, pine woodland, mangrove, evergreen lowland or wooded country and as ‘mixed’ for species that inhabit both ‘open’ and ‘forested’ habitat. 
 	- `diet` diet type was classified as ‘granivore’ for species that feed mainly on seeds and nuts, as ‘fructivore’ for species that feed mainly on fruits and plants, as ‘nectarivore’ for species that feed mainly on nectar and flowers, and as ‘mixed’ for species that feed on all types 
 
+- `parrot_vpl_overview.xlsx` species overview with CITES and WPTpet information
 
+  - `Number` not used
+  
+  - `Scientific name` scientific name, lower case, space seperated
+  
+  - `former subspec of` not used
+  
+  - `Genus` not used
+  
+  - `Family` not used
+  
+  - `Videos collected` numeric, how many videos were found on YouTube
+  
+  - `Videos analyzed` numeric, how many videos were analysed, max 25 videos
+  
+  - `Videos with vocal learning` numeric, how many videos contained vocal learning
+  
+  - `CITEStrade` whether or not a species is traded according to CITES
+  
+  - `WPTpet` whether or not a species is registered as pet
+  
+  - `WPTnotes` not used
+  
+  - `CITESnotes` not used
 
 All results can be found in `ANALYSIS/RESULTS`:
 
@@ -141,12 +198,10 @@ All results can be found in `ANALYSIS/RESULTS`:
 Other than the `ANALYSIS` folder the main folder also contains:
 
 - `bibliography.bib` contains all the reference in bibtex format
+
+- `license.md` contains the license information (basically you can just use everything from the repo)
   
 - `README.md` the file you are reading now, should explain everything you need to know
-
-- `methods and results.Rmd` the md to compile parts of the preliminary methods and results
-
-- `methods-and-results.docx` and `methods-and-results.pdf` compiled versions of the above
 
 - `parrot_mimicry.Rproj` opens a new R Project from which all code can be run
   
