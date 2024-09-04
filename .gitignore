@@ -30,3 +30,4 @@ ANALYSIS/RESULTS/models_quality.RData
 ANALYSIS/RESULTS/models_presence_video_only.RData
 ANALYSIS/RESULTS/models_nr_unique_no_words.RData
 *.svg
+ANALYSIS/RESULTS/table quality.csv
