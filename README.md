@@ -191,7 +191,9 @@ All data is in `ANALYSIS/DATA`:
 
 All results can be found in `ANALYSIS/RESULTS`:
 
-- `DAG.pdf` the directed acyclic graph
+- `cleaned_data.RData` RData file with the cleaned data per species, it loads a data.frame `dat` with all variables per species and a tree object `tree` with all species
+
+- `cleaned_data_long.RData` RData file with the cleaned data per video, it loads a data.frame `dat_long` with all variables per video and a tree object `tree` with all species
 
 - **add other results when finished**
   
