@@ -22,3 +22,10 @@ ANALYSIS/CODE/models/longevity_to_nr_unique
 ANALYSIS/CODE/models/sociality_to_nr_unique
 *.pdf
 ANALYSIS/RESULTS/ARCHIVE
+ANALYSIS/RESULTS/models_nr_unique.RData
+ANALYSIS/RESULTS/models_nr_unique_words.RData
+ANALYSIS/RESULTS/models_presence.RData
+ANALYSIS/RESULTS/models_presence_pets_only.RData
+ANALYSIS/RESULTS/models_quality.RData
+ANALYSIS/RESULTS/models_presence_video_only.RData
+ANALYSIS/RESULTS/models_nr_unique_no_words.RData
