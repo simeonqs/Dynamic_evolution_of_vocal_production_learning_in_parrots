@@ -2,7 +2,7 @@
 // Simeon Q. Smeele
 // Started: 10-11-2022
 // Last modified: 09-12-2022
-// Description: Model to estimate the body size. 
+// Description: Model to estimate the effect of body size. 
 
 data{
   // Dimensions
