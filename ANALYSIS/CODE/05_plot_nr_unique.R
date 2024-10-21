@@ -147,7 +147,7 @@ ten_species = enough_species |> sample(10) |> names() |> sort(decreasing = FALSE
 trans_species = seq_along(ten_species)
 names(trans_species) = ten_species
 pdf('ANALYSIS/RESULTS/within species variation.pdf', 7, 10)
-par(mar = c(4, 10, 1, 1))
+par(mar = c(4, 12, 1, 1))
 sub = dat_long[dat_long$species %in% ten_species,]
 plot(as.integer(sub$distinctmimic), trans_species[sub$species] + rnorm(nrow(sub), 0, 0.05),
      yaxt = 'n', xlab = 'number of unique mimics', ylab = '')
