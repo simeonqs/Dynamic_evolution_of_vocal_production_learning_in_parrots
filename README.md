@@ -17,7 +17,22 @@ Required packages are installed and loaded in each script. However, some need ma
 
 * To run the Stan models *Stan* needs to be installed. This is not an R package, but *Stan* can be run from R. For installation see: https://mc-stan.org/users/interfaces/. 
 
-* To run *Stan* from R *cmdstanr* is required. It can be installed from CRAN, but you need to finish the set-up, see: https://mc-stan.org/cmdstanr/. 
+* To run *Stan* from R *cmdstanr* is required. It can be installed from CRAN, but you need to finish the set-up, see: https://mc-stan.org/cmdstanr/. NOTE: models were developed using *stanr* v2.32.2, so make sure this version is specified during installation:
+
+  ```
+  install_cmdstan(
+    dir = NULL,
+    cores = getOption("mc.cores", 2),
+    quiet = FALSE,
+    overwrite = FALSE,
+    timeout = 1200,
+    version = "2.32.2",
+    release_url = NULL,
+    release_file = NULL,
+    cpp_options = list(),
+    check_toolchain = TRUE,
+    wsl = FALSE)
+  ``` 
 
 ------------------------------------------------
 # Workflow
