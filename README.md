@@ -241,11 +241,11 @@ Other than the `ANALYSIS` folder the main folder also contains:
 ------------------------------------------------
 # Session info
 
-R version 4.2.1 (2022-06-23)
+R version 4.4.2 (2024-10-31)
 
-Platform: x86_64-apple-darwin17.0 (64-bit)
+Platform: x86_64-pc-linux-gnu
 
-Running under: macOS Catalina 10.15.7
+Running under: Ubuntu 22.04.5 LTS
 
 ------------------------------------------------
 # Maintainers and contact
