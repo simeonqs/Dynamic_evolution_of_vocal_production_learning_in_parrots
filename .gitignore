@@ -9,9 +9,14 @@
 methods*
 model definitions.docx
 ANALYSIS/CODE/ARCHIVE
+ANALYSIS/CODE/models/context_to_quality
 ANALYSIS/CODE/models/body_to_presence
+ANALYSIS/CODE/models/body_to_quality
 ANALYSIS/CODE/models/brain_to_presence
+ANALYSIS/CODE/models/brain_to_quality
+ANALYSIS/CODE/models/habitat_to_quality
 ANALYSIS/CODE/models/longevity_to_presence
+ANALYSIS/CODE/models/longevity_to_quality
 ANALYSIS/CODE/models/phylo_signal
 ANALYSIS/CODE/models/sociality_to_presence
 ANALYSIS/CODE/models/habitat_to_presence
@@ -20,6 +25,8 @@ ANALYSIS/CODE/models/brain_to_nr_unique
 ANALYSIS/CODE/models/habitat_to_nr_unique
 ANALYSIS/CODE/models/longevity_to_nr_unique
 ANALYSIS/CODE/models/sociality_to_nr_unique
+ANALYSIS/CODE/models/sociality_to_quality
+ANALYSIS/CODE/models/template_to_quality
 *.pdf
 ANALYSIS/RESULTS/ARCHIVE
 ANALYSIS/RESULTS/models_nr_unique.RData
