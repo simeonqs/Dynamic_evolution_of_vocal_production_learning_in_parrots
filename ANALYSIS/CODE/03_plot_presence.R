@@ -55,6 +55,15 @@ for(i in 1:4){
 axis(1, c(-1.5, 1.5), c(-1.5, 1.5))
 mtext('effect', 1, 2.5, cex = 0.75)
 
+# Print effects
+for(i in seq_along(effects)){
+  m = effects[[i]] |> mean() |> round(2)
+  pi = effects[[i]] |> PI() |> round(2)
+  message(c('longevity', 'brain size', 'sociality', 'body size')[i], ': mean = ', m, 
+          ', 89% PI = (', pi[1], ', ', pi[2], ')')
+  
+}
+
 # Scatters
 ## longevity
 par(mar = c(2.5, 4.5, 0.5, 0.5))
