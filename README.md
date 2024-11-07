@@ -210,7 +210,21 @@ All results can be found in `ANALYSIS/RESULTS`:
 
 - `cleaned_data_long.RData` RData file with the cleaned data per video, it loads a data.frame `dat_long` with all variables per video and a tree object `tree` with all species
 
-- **add other results when finished**
+- `models_nr_unique.RData` RData files that contain the fit and posterior objects for the models regarding the number of unique mimicks
+
+- `models_nr_unique_no_words.RData` RData files that contain the fit and posterior objects for the models regarding number of unique mimicks excluding words
+
+- `models_nr_unique_words.RData` RData files that contain the fit and posterior objects for the models regarding the number of unique words
+
+- `models_presence.RData` RData files that contain the fit and posterior objects for the models regarding the presence of VPL
+
+- `models_presence_pets_only.RData` RData files that contain the fit and posterior objects for the models regarding the presence of VPL in species that are kept as pets
+
+- `models_presence_video_only.RData` RData files that contain the fit and posterior objects for the models regarding the presence of VPL in species for which videos were available
+
+- `models_quality.RData` RData files that contain the fit and posterior objects for the models regarding the quality of mimicry
+
+- `table_quality.csv` csv file with the results for the models regarding the quality of mimicry
   
 Other than the `ANALYSIS` folder the main folder also contains:
 
