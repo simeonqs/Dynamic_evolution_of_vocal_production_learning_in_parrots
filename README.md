@@ -17,7 +17,22 @@ Required packages are installed and loaded in each script. However, some need ma
 
 * To run the Stan models *Stan* needs to be installed. This is not an R package, but *Stan* can be run from R. For installation see: https://mc-stan.org/users/interfaces/. 
 
-* To run *Stan* from R *cmdstanr* is required. It can be installed from CRAN, but you need to finish the set-up, see: https://mc-stan.org/cmdstanr/. 
+* To run *Stan* from R *cmdstanr* is required. It can be installed from CRAN, but you need to finish the set-up, see: https://mc-stan.org/cmdstanr/. NOTE: models were developed using *stanr* v2.32.2, so make sure this version is specified during installation:
+
+  ```
+  install_cmdstan(
+    dir = NULL,
+    cores = getOption("mc.cores", 2),
+    quiet = FALSE,
+    overwrite = FALSE,
+    timeout = 1200,
+    version = "2.32.2",
+    release_url = NULL,
+    release_file = NULL,
+    cpp_options = list(),
+    check_toolchain = TRUE,
+    wsl = FALSE)
+  ``` 
 
 ------------------------------------------------
 # Workflow
@@ -195,7 +210,21 @@ All results can be found in `ANALYSIS/RESULTS`:
 
 - `cleaned_data_long.RData` RData file with the cleaned data per video, it loads a data.frame `dat_long` with all variables per video and a tree object `tree` with all species
 
-- **add other results when finished**
+- `models_nr_unique.RData` RData files that contain the fit and posterior objects for the models regarding the number of unique mimicks
+
+- `models_nr_unique_no_words.RData` RData files that contain the fit and posterior objects for the models regarding number of unique mimicks excluding words
+
+- `models_nr_unique_words.RData` RData files that contain the fit and posterior objects for the models regarding the number of unique words
+
+- `models_presence.RData` RData files that contain the fit and posterior objects for the models regarding the presence of VPL
+
+- `models_presence_pets_only.RData` RData files that contain the fit and posterior objects for the models regarding the presence of VPL in species that are kept as pets
+
+- `models_presence_video_only.RData` RData files that contain the fit and posterior objects for the models regarding the presence of VPL in species for which videos were available
+
+- `models_quality.RData` RData files that contain the fit and posterior objects for the models regarding the quality of mimicry
+
+- `table_quality.csv` csv file with the results for the models regarding the quality of mimicry
   
 Other than the `ANALYSIS` folder the main folder also contains:
 
@@ -212,11 +241,11 @@ Other than the `ANALYSIS` folder the main folder also contains:
 ------------------------------------------------
 # Session info
 
-R version 4.2.1 (2022-06-23)
+R version 4.4.2 (2024-10-31)
 
-Platform: x86_64-apple-darwin17.0 (64-bit)
+Platform: x86_64-pc-linux-gnu
 
-Running under: macOS Catalina 10.15.7
+Running under: Ubuntu 22.04.5 LTS
 
 ------------------------------------------------
 # Maintainers and contact
