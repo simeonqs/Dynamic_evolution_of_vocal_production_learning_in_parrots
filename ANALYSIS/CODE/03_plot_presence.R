@@ -106,13 +106,13 @@ sd_var = sd(var, na.rm = T)
 plot(var + rnorm(nrow(dat), 0, 0.1), dat$vocal,
      pch = 16, col = alpha(1, 0.5), xaxt = 'n', yaxt = 'n',
      xlab = '', ylab = '', xlim = c(-0.4, 1.4))
-axis(1, c(0, 1), c('no', 'yes'))
+axis(1, c(0, 1), c('non-gregarious', 'gregarious'))
 axis(2, c(0, 1), c(0, 1))
 lims = c(0, 1)
 for(i in 1:20) lines(lims, 
                      inv_logit(c(sample(post_soc$a_greg[,1], 1), sample(post_soc$a_greg[,2], 1))),
                      col = alpha(cols[3], 0.8), lwd = 5)
-mtext('gregarious', 1, 2.5, cex = 0.75)
+mtext('sociality', 1, 2.5, cex = 0.75)
 mtext('probability of VPL', 2, 2.5, cex = 0.75)
 ## body
 var = dat$log_mean_body_weight
