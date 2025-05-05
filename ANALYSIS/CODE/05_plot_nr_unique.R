@@ -3,7 +3,7 @@
 # Date started: 10-11-2022
 # Date last modified: 24-07-2023
 # Author: Simeon Q. Smeele
-# Description: Modelling the number of unique mimics.  
+# Description: Modelling the VPL total repertoire size.  
 # >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 # Loading libraries
@@ -22,7 +22,7 @@ cols = c(red = '#d11141', green = '#00b159', blue = '#00aedb', orange = '#f37735
 # Paths
 path_cleaned_data_long = 'ANALYSIS/RESULTS/cleaned_data_long.RData'
 path_cleaned_data = 'ANALYSIS/RESULTS/cleaned_data.RData'
-path_pdf = 'ANALYSIS/RESULTS/results number of unique mimics.pdf'
+path_pdf = 'ANALYSIS/RESULTS/results VPL total repertoire size.pdf'
 path_models_nr_unique = 'ANALYSIS/RESULTS/models_nr_unique.RData'
 
 # Load data
@@ -69,7 +69,7 @@ for(i in 1:20) lines(lims,
                      log10(exp(sample(post_long$a_bar, 1) + sample(post_long$b_long, 1) * lims) + 1),
                      col = alpha(cols[1], 0.8), lwd = 5)
 mtext('life expectancy [y]', 1, 2.5, cex = 0.75)
-mtext('number of unique mimics', 2, 2.5, cex = 0.75)
+mtext('VPL total repertoire size', 2, 2.5, cex = 0.75)
 ## brain size
 var = post_brain$rel_brain %>% apply(2, mean)
 mean_var = mean(var, na.rm = T)
@@ -86,7 +86,7 @@ for(i in 1:20) lines(lims,
                      log10(exp(sample(post_brain$a_bar, 1) + sample(post_brain$b_brain, 1) * lims) + 1),
                      col = alpha(cols[2], 0.8), lwd = 5)
 mtext('relative brain size [sd]', 1, 2.5, cex = 0.75)
-mtext('number of unique mimics', 2, 2.5, cex = 0.75)
+mtext('VPL total repertoire size', 2, 2.5, cex = 0.75)
 ## sociality
 par(mar = c(0.5, 4.5, 2.5, 0.5))
 var = dat_long$gregar 
@@ -95,14 +95,14 @@ sd_var = sd(var, na.rm = T)
 plot(var + rnorm(nrow(dat_long), 0, 0.1), log10(dat_long$n_im + 1),
      pch = 16, col = alpha(1, 0.5), xaxt = 'n', yaxt = 'n',
      xlab = '', ylab = '')
-axis(1, c(0, 1), c('no', 'yes'))
+axis(1, c(0, 1), c('non-gregarious', 'gregarious'))
 axis(2, c(0, log10(2), log10(11)), c(0, 1, 10))
 lims = c(0, 1)
 for(i in 1:20) lines(lims, 
                      log10(exp(c(sample(post_soc$a_greg[,1], 1), sample(post_soc$a_greg[,2], 1))) + 1),
                      col = alpha(cols[3], 0.8), lwd = 5)
-mtext('gregarious', 1, 2.5, cex = 0.75)
-mtext('number of unique mimics', 2, 2.5, cex = 0.75)
+mtext('sociality', 1, 2.5, cex = 0.75)
+mtext('VPL total repertoire size', 2, 2.5, cex = 0.75)
 ## body
 var = dat_long$log_mean_body_weight
 mean_var = mean(var, na.rm = T)
@@ -117,7 +117,7 @@ for(i in 1:20) lines(lims,
                      log10(exp(sample(post_body$a_bar, 1) + sample(post_body$b_body, 1) * lims) + 1),
                      col = alpha(cols[4], 0.8), lwd = 5)
 mtext('body size [g]', 1, 2.5, cex = 0.75)
-mtext('number of unique mimics', 2, 2.5, cex = 0.75)
+mtext('VPL total repertoire size', 2, 2.5, cex = 0.75)
 
 # Close PDF
 dev.off()
@@ -150,7 +150,7 @@ pdf('ANALYSIS/RESULTS/within species variation.pdf', 7, 10)
 par(mar = c(4, 12, 1, 1))
 sub = dat_long[dat_long$species %in% ten_species,]
 plot(as.integer(sub$distinctmimic), trans_species[sub$species] + rnorm(nrow(sub), 0, 0.05),
-     yaxt = 'n', xlab = 'number of unique mimics', ylab = '')
+     yaxt = 'n', xlab = 'VPL total repertoire size', ylab = '')
 for(i in unique(trans_species[sub$species])) 
   vioplot(as.integer(sub$distinctmimic)[trans_species[sub$species] == i], at = i,
           horizontal = TRUE, add = TRUE, col = alpha(1, 0.5), pchMed = 3)
