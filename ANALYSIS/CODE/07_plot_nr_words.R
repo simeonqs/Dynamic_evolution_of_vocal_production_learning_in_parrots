@@ -70,7 +70,7 @@ for(i in 1:20) lines(lims,
                      log10(exp(sample(post_long$a_bar, 1) + sample(post_long$b_long, 1) * lims) + 1),
                      col = alpha(cols[1], 0.8), lwd = 5)
 mtext('life expectancy [y]', 1, 2.5, cex = 0.75)
-mtext('number of unique mimics', 2, 2.5, cex = 0.75)
+mtext('VPL anthropophonic repertoire size', 2, 2.5, cex = 0.75)
 ## brain size
 var = post_brain$rel_brain %>% apply(2, mean)
 mean_var = mean(var, na.rm = T)
@@ -87,7 +87,7 @@ for(i in 1:20) lines(lims,
                      log10(exp(sample(post_brain$a_bar, 1) + sample(post_brain$b_brain, 1) * lims) + 1),
                      col = alpha(cols[2], 0.8), lwd = 5)
 mtext('relative brain size [sd]', 1, 2.5, cex = 0.75)
-mtext('number of unique mimics', 2, 2.5, cex = 0.75)
+mtext('VPL anthropophonic repertoire size', 2, 2.5, cex = 0.75)
 ## sociality
 par(mar = c(0.5, 4.5, 2.5, 0.5))
 var = dat_long$gregar 
@@ -96,14 +96,14 @@ sd_var = sd(var, na.rm = T)
 plot(var + rnorm(nrow(dat_long), 0, 0.1), log10(dat_long$distinctwords + 1),
      pch = 16, col = alpha(1, 0.5), xaxt = 'n', yaxt = 'n',
      xlab = '', ylab = '')
-axis(1, c(-2, 0, 2), round(exp(c(-2, 0, 2) * sd_var + mean_var)))
+axis(1, c(0, 1), c('non-gregarious', 'gregarious'))
 axis(2, log10(c(2, 11)), c(1, 10))
 lims = c(0, 1)
 for(i in 1:20) lines(lims, 
                      log10(exp(c(sample(post_soc$a_greg[,1], 1), sample(post_soc$a_greg[,2], 1))) + 1),
                      col = alpha(cols[3], 0.8), lwd = 5)
-mtext('gregarious', 1, 2.5, cex = 0.75)
-mtext('number of unique mimics', 2, 2.5, cex = 0.75)
+mtext('sociality', 1, 2.5, cex = 0.75)
+mtext('VPL anthropophonic repertoire size', 2, 2.5, cex = 0.75)
 ## body
 var = dat_long$log_mean_body_weight
 mean_var = mean(var, na.rm = T)
@@ -118,7 +118,7 @@ for(i in 1:20) lines(lims,
                      log10(exp(sample(post_body$a_bar, 1) + sample(post_body$b_body, 1) * lims) + 1),
                      col = alpha(cols[4], 0.8), lwd = 5)
 mtext('body size [g]', 1, 2.5, cex = 0.75)
-mtext('number of unique mimics', 2, 2.5, cex = 0.75)
+mtext('VPL anthropophonic repertoire size', 2, 2.5, cex = 0.75)
 
 # Close PDF
 dev.off()
