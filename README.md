@@ -126,7 +126,7 @@ All scripts are in `ANALYSIS/CODE`:
   
 All data is in `ANALYSIS/DATA`:
 
-- the folders `AFR`, `body weight`, `brain size` and `longevity` are downloaded from Smeele et al. (2022), see <https://github.com/simeonqs/Coevolution_of_relative_brain_size_and_life_expectancy_in_parrots> for meta data
+- the folders `AFR`, `body weight`, `brain size` and `longevity` are downloaded from Smeele et al. (2022), see <https://github.com/simeonqs/Dynamic_evolution_of_vocal_production_learning_in_parrots> for meta data
 
 - `5.ParrotSupertree.tre` phylogenetic tree
 
